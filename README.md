@@ -29,7 +29,8 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
   S: board total integrity (%)
   
 ### The DNA
-  Chromosome DNA: { a, b, c, d, e, f, g, h }
+  Chromosome DNA: { a, b, c, d, e, f, g, h }  
+  All DNAs are random float numbers between -10.00 and +10.00 (with 2 number precisions)  
   
 ### ETC.
   Default Population Count: 100
