@@ -7,6 +7,25 @@ body {
     display: none !important;
 }
 
+#containerHelp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 2px 5px;
+    opacity: .7;
+}
+#containerHelp:hover {
+    opacity: 1;
+}
+
+#containerHelp > a {
+    color: white;
+}
+#containerHelp > a:hover {
+    color: yellow;
+}
+
+
 #mainContainer {
     text-align: center;
 }
