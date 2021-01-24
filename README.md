@@ -1,6 +1,9 @@
 # GaBlockSudoku - Genetic Algortihm for BockSudoku Puzzle solving
 
-A test FULLY JavaScript project for solving Block Sudoku puzzle via Machine Learning Genetic Algorithm.
+A complete JavaScript project for solving Block Sudoku puzzle via Machine Learning Genetic Algorithm.
+
+Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/ 
+
 
 #### Why JavaScript?
   It was easy to me to have all Visual Features, Coding, and most importantlty Web features on one side together, therefore I could concentrrate on the algorithm implementation more! ;)
@@ -22,7 +25,7 @@ Since all the data is on the client side, you could easy watch the algorithm and
     
 ### Halt Learning Process
   ```javascript
-  HALT_LEARNING = true; //
+  HALT_LEARNING = true;
   ```
   Change it into true in case you want to halt the learning process
   Default value is false
@@ -48,7 +51,7 @@ Since all the data is on the client side, you could easy watch the algorithm and
 
 ## Technical Info for monitoring Learning State
 
-### Check Genetic Algorithm data (generally)
+### Check Genetic Algorithm data ( root variable )
   ```javascript
   GENETICS
   ```
@@ -97,6 +100,6 @@ Since all the data is on the client side, you could easy watch the algorithm and
   ```
   Define your chromosome; then the custome play would use to solve the puzzle
   It is undefined by default
- 
+  You can find/copy the best Chromosome (DNAs) data from GENETICS.populationGameScore after a learning process and choosing the best one according to GENETICS.populationAvgSuccessRates
 
 
