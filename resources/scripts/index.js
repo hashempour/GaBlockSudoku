@@ -866,6 +866,7 @@ function buttonPlayARound_Click() {
 
 
     PLAY_INFO.currentElements = [];
+    drawNewElements( PLAY_INFO.currentElements );   // clear elements
 }
 
 function buttonLearn_Click() {
