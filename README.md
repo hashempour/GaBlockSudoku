@@ -6,10 +6,13 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
 
 
 #### Why JavaScript?
-  It was easy to me to have all Visual Features, Coding, and most importantlty Web features on one side together, therefore I could concentrrate on the algorithm implementation more! ;)
+  It was easy for me to have all Visual Features, Coding, and most importantlty Web features on one side together, therefore I could concentrrate on the algorithm implementation more! ;)
   
 #### Why Genetic Algorithm project?
   Why not! Due to COVID-19 restrictions, these days I had a lot of spare time in HOME to think about a hobby or fun project!
+  
+#### Is the implemented Algorithm / Game-Play perfect?
+  I don't think so! You are welcome to find the probable bugs or some improvement on the implemented Algorithm :)
   
   
 ## Technical Hint
@@ -18,10 +21,10 @@ Since all the data is on the client side, you could easy watch the algorithm and
 
 ### Play Time in MS
   ```javascript
-  PLAY_TIME_MS = 1;
+  PLAY_TIME_MS = 50;
   ```
   Change it into the time (in milisecond) you want the learning process steps goes on
-  Default value is 1
+  Default value is 50
     
 ### Halt Learning Process
   ```javascript
@@ -87,7 +90,7 @@ Since all the data is on the client side, you could easy watch the algorithm and
  
 ### My custom Chromosome to PLAY with -- not useful for learning
   ```javascript
-  var myChromosome = { 
+  myChromosome = { 
     a: 5.44,
     b: 6.17,
     c: 5.85,
@@ -100,6 +103,8 @@ Since all the data is on the client side, you could easy watch the algorithm and
   ```
   Define your chromosome; then the custome play would use to solve the puzzle
   It is undefined by default
-  You can find/copy the best Chromosome (DNAs) data from GENETICS.populationGameScore after a learning process and choosing the best one according to GENETICS.populationAvgSuccessRates
+  The myChromosome DNA data will be automatically defined by the best Chromosome DNA data at the end of each learning generation.
+  Also you can find/copy the best Chromosome (DNAs) data from GENETICS.populationGameScore after a learning process and choosing the one according to GENETICS.populationAvgSuccessRates
 
 
+## FOR IMPLEMENTATION TECHNICAL HINTS... watch the implemented code either on GitHub or by VIEW-SROUCE-CODE from browser!
