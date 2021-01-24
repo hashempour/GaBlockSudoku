@@ -1,6 +1,8 @@
 var VISUALISE = 2;      // 0, 1, 2
 var DRAW_ALL_ELEMENTS = true;
 
+var myChromosome = null;    // it will be defined either by user or during the learning process
+
 const SVG_NAMESPACE_URI = 'http://www.w3.org/2000/svg';
 
 const GAME_INFO = {
@@ -333,10 +335,6 @@ const PLAY_INFO = {
     }
 };
 
-const GENETIC_INFO =  {
-    population: []
-};
-
 $(document).ready(function () {
     prepareStageArea();
     prepareElementArea();
@@ -348,7 +346,11 @@ $(document).ready(function () {
     $( '#buttonPlayARound' ).on( 'click', buttonPlayARound_Click );
     $( '#buttonLearn' ).on( 'click', buttonLearn_Click );
 
-    $( '#checkboxGameMode').on( 'click', checkboxGameMode_Click ).on( 'change', checkboxGameMode_Change ).prop( 'checked', true).trigger( 'change' );
+    $( '#checkboxGameMode' ).on( 'click', checkboxGameMode_Click ).on( 'change', checkboxGameMode_Change ).prop( 'checked', true).trigger( 'change' );
+
+    $( '#numberPlayTime' ).val( PLAY_TIME_MS );
+    $( '#checkboxFastForward' ).on( 'change', checkboxFastForward_Change );
+    $( '#numberPlayTime' ).on( 'change', numberPlayTime_Change );
 
 });
 
@@ -738,6 +740,8 @@ function resetBoard() {
     if ( VISUALISE > 0 ) {
         $('#svgElement .elementBlock').remove();
         $('#svgStage .elementBlock').removeClass('active ').removeClass('fresh');
+
+        updateStageVisualState();
     }
 
     updateScore();
@@ -796,6 +800,10 @@ function changeGameMode( learnMode ) {
     $( '.gameModeItem.gameModePlay' ).toggleClass( 'hiddenElement', learnMode );
     $( '.gameModeItem.gameModeLearn' ).toggleClass( 'hiddenElement', !learnMode );
 
+    if ( !learnMode ) {
+        resetBoard();
+    }
+
 }
 
 function isLearnMode() {
@@ -835,8 +843,8 @@ function stageBlock_Click() {
 
 
 function buttonPlayARound_Click() {
-    if ( typeof( myChromosome ) === "undefined" ) {
-        let msg = 'DEFINE myChromosome!\nvar myChromosome = { a: #, b: #, c: #, d: #, e: #, f: #, g: #, h: #, }; // # is DNA float number';
+    if ( myChromosome === null ) {
+        let msg = 'Either define myChromosome DNA or LEARN the game for a while to set it automatically!\nmyChromosome = { a: #, b: #, c: #, d: #, e: #, f: #, g: #, h: # }; // # is DNA float number\n* The more generation game learns, the better chromosome you have for play!';
         alert( msg );
         console.error( msg );
 
@@ -882,4 +890,28 @@ function checkboxGameMode_Click( e ) {
 
 function checkboxGameMode_Change() {
     changeGameMode( $( this ).is( ':checked' ) );
+}
+
+function checkboxFastForward_Change() {
+    let $numberPlayTime = $( '#numberPlayTime' );
+    let fastForward = $( this ).is( ':checked' );
+    $numberPlayTime.prop( 'disabled', fastForward );
+
+    if ( fastForward ) {
+        PLAY_TIME_MS = 0;
+    } else {
+        let value = $numberPlayTime.val();
+        if ( !isNaN( value ) && value >= 0 ) {
+            PLAY_TIME_MS = value;
+        }
+    }
+}
+
+function numberPlayTime_Change() {
+    let value = $( '#numberPlayTime' ).val();
+    if ( !isNaN( value ) && value >= 0 ) {
+        setTimeout( function () {
+            PLAY_TIME_MS = value;
+        }, 50 );
+    }
 }

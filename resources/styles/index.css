@@ -110,3 +110,20 @@ hr {
 #labelGameMode input[type="checkbox"]:not(:checked) ~ .gameModeItem.gameModeLearn {
     display: none;
 }
+
+#numberPlayTime {
+    width: 50px;
+}
+
+#containerLearnState > label {
+    color: silver;
+}
+
+#containerLearnState > label > span {
+    color: white;
+}
+
+#containerLearnState > p {
+    color: orange;
+    font-size: 12px;
+}
