@@ -202,7 +202,7 @@ function playNextPopulation() {
 
     if ( GENETICS.currentPopulation < GENETICS.POPULATION_COUNT ) {
         if ( VISUALISE > 0 ) {
-            $( '#labelPop' ).text( GENETICS.currentPopulation );
+            $( '#labelPop' ).text( ( GENETICS.currentPopulation + 1 ) + ' of ' + GENETICS.POPULATION_COUNT );
         }
 
         resetBoard();

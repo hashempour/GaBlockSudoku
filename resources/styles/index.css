@@ -127,3 +127,82 @@ hr {
     color: orange;
     font-size: 12px;
 }
+
+
+
+
+
+
+.modal {
+    display: inline-table;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba( 0, 0, 0, .9);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 200ms;
+}
+.modal.shown {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.modal > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.centerAlign {
+    display: block;
+    text-align: center;
+}
+
+
+#defineChromosomePanel_Body {
+    display: inline-block;
+    position: relative;
+    width: 500px;
+    max-height: 100vh;
+    padding: 15px;
+    border: 1px solid cyan;
+    border-radius: 2px;
+    background-color: #eee;
+    color: darkblue;
+    box-shadow: 2px 2px 5px silver;
+    text-align: justify;
+}
+
+#defineChromosomePanel_Body label {
+    box-sizing: border-box;
+    display: inline-block;
+    width: calc( 50% - 7px );
+}
+#defineChromosomePanel_Body label > span {
+    display: inline-block;
+    width: 20px;
+}
+#defineChromosomePanel_Body label:nth-child(2n) {
+    text-align: right;
+    margin-right: 5px;
+}
+#defineChromosomePanel_Body label:nth-child(2n+1) {
+    text-align: left;
+    margin-left: 5px;
+}
+
+#defineChromosomePanel_Body input[type="text"] {
+    width: 50px;
+}
+#defineChromosomePanel_Body input[type="text"].error {
+    background-color: pink;
+    border-color: red;
+}
+
+#defineChromosomePanel_Body button {
+    background-color: white;
+}

@@ -96,6 +96,46 @@
                     <p>end of each generation the Best Chromosome DNA data will be automatically saved as 'myChromosome' for manual play. Needless to say, the more generation of learning, the better Chromosome DNA data to play!</p>
                 </div>
             </div>
+            <div id="defineChromosomePanel" class="modal">
+                <div>
+                    <div id="defineChromosomePanel_Body">
+                        <span>There is no chromosome data to play yet.</span>
+                        <br /><br />
+                        <p>You can go to LEARN mode and spend some time and CPU :) to learn and see what chromosome DNA will you find the best after 100 or maybe 1000 generations!</p>
+                        <br />
+                        <p>During the learning, at end of each generation, the smartest chromosome (so far) would be picked up from population to play here then.</p>
+                        <br />
+                        <div class="centerAlign">
+                            <button id="buttonGoForLearn"> Let's learn...! </button>
+                        </div>
+                        <br />
+                        <p>DO NOT FORGET: the more generation you learn, the smartest chromosome you will find! and you should play at least 50 or 100 generation.</p>
+                        <br />
+                        <hr />
+                        <br />
+                        <div class="centerAlign">
+                            <span>OR</span>
+                        </div>
+                        <br />
+                        <p>If you already have your chromosome data, please set the DNA values here to play...</p>
+                        <div class="centerAlign">
+                            <span>Chromosome DNA values</span>
+                        </div>
+                        <label><span>A:</span><input type="text" maxlength="6" data-key="a" /></label>
+                        <label><span>B:</span><input type="text" maxlength="6" data-key="b" /></label>
+                        <label><span>C:</span><input type="text" maxlength="6" data-key="c" /></label>
+                        <label><span>D:</span><input type="text" maxlength="6" data-key="d" /></label>
+                        <label><span>E:</span><input type="text" maxlength="6" data-key="e" /></label>
+                        <label><span>F:</span><input type="text" maxlength="6" data-key="f" /></label>
+                        <label><span>G:</span><input type="text" maxlength="6" data-key="g" /></label>
+                        <label><span>H:</span><input type="text" maxlength="6" data-key="h" /></label>
+                        <br /><br />
+                        <div class="centerAlign">
+                            <button id="buttonSubmitChromosomeData">PLAY!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div><br />
     </div>
 </body>

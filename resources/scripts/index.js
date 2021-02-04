@@ -335,7 +335,7 @@ const PLAY_INFO = {
     }
 };
 
-$(document).ready(function () {
+$( document ).ready(function () {
     prepareStageArea();
     prepareElementArea();
 
@@ -348,9 +348,10 @@ $(document).ready(function () {
 
     $( '#checkboxGameMode' ).on( 'click', checkboxGameMode_Click ).on( 'change', checkboxGameMode_Change ).prop( 'checked', true).trigger( 'change' );
 
-    $( '#numberPlayTime' ).val( PLAY_TIME_MS );
+    $( '#numberPlayTime' ).val( PLAY_TIME_MS ).on( 'change', numberPlayTime_Change );
     $( '#checkboxFastForward' ).on( 'change', checkboxFastForward_Change );
-    $( '#numberPlayTime' ).on( 'change', numberPlayTime_Change );
+    $( '#buttonGoForLearn').on( 'click', buttonGoForLearn_Click );
+    $( '#buttonSubmitChromosomeData' ).on( 'click', buttonSubmitChromosomeData_Click );
 
 });
 
@@ -844,9 +845,10 @@ function stageBlock_Click() {
 
 function buttonPlayARound_Click() {
     if ( myChromosome === null ) {
+        $( '#defineChromosomePanel.modal' ).addClass( 'shown' );
+
         let msg = 'Either define myChromosome DNA or LEARN the game for a while to set it automatically!\nmyChromosome = { a: #, b: #, c: #, d: #, e: #, f: #, g: #, h: # }; // # is DNA float number\n* The more generation game learns, the better chromosome you have for play!';
-        alert( msg );
-        console.error( msg );
+        console.info( msg );
 
         return;
     }
@@ -854,7 +856,7 @@ function buttonPlayARound_Click() {
     if ( PLAY_INFO.currentElements.length !== 3 ) {
         let msg = 'SELECT 3 elements!';
         alert( msg );
-        console.error( msg );
+        console.info( msg );
 
         return;
     }
@@ -914,5 +916,33 @@ function numberPlayTime_Change() {
         setTimeout( function () {
             PLAY_TIME_MS = value;
         }, 50 );
+    }
+}
+
+function buttonGoForLearn_Click() {
+    $( '#labelGameMode').trigger( 'click' );
+
+    $( this ).parents( '.modal' ).removeClass( 'shown' );
+}
+
+
+function buttonSubmitChromosomeData_Click() {
+    let isValid = true;
+    let chromosomeData = {};
+    $( '#defineChromosomePanel_Body input[type="text"][data-key]' ).each( function() {
+        let value = $( this ).val();
+        let isNotNumber = value === null || value.trim().length === 0 || isNaN( $( this ).val() );
+        $( this ).toggleClass( 'error', isNotNumber );
+        if ( isNotNumber ) {
+            isValid = false;
+        } else {
+            chromosomeData[ $( this ).attr( 'data-key' ) ] = Number( $( this ).val() );
+        }
+    } );
+
+    if ( isValid ) {
+        myChromosome = chromosomeData;
+
+        $( this ).parents( '.modal' ).removeClass( 'shown' );
     }
 }
