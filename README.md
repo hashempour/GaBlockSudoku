@@ -22,7 +22,7 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
   
   X: cols integrity (%)  
   Y: rows integrity (%)  
-  X: 9-blocks integrity (%)  
+  Z: 9-blocks integrity (%)  
   W: total occupation (%)  
   Q: selected element occupation (%)  
   T: row/col/blockSet completeness (%)    
