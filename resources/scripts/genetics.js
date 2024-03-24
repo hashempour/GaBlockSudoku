@@ -638,7 +638,18 @@ function playARound(chromosome, elements) {
     successfulPlay = false;
   }
 
-  if (successfulPlay && !HALT_LEARNING && LEARN_IN_PROGRESS) {
+  if (!successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
+    // only for normal play (not learning)
+    alert("GANE OVER!");
+  } else if (successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
+    // only for normal play (not learning)
+    // we shoukd choose 3 other random elements for the next round
+    // it runs with delay after all 3 elements replacements in the board
+    setTimeout(function () {
+      PLAY_INFO.currentElements = drawNewElements(undefined);
+      $("#buttonPlayARound").prop("disabled", false);
+    }, 2000 * (0 + 1 + 2));
+  } else if (successfulPlay && !HALT_LEARNING && LEARN_IN_PROGRESS) {
     // next round
     setTimeout(playARound, PLAY_TIME_MS, chromosome);
   } else if (!HALT_LEARNING && LEARN_IN_PROGRESS) {
