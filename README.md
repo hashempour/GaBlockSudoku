@@ -7,6 +7,9 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
 
 #### Why JavaScript?
   It was easy for me to have all Visual Features, Coding, and most importantlty Web features on one side together, therefore I could concentrrate on the algorithm implementation more! ;)
+
+#### Is JavaScript a proper choice for AI?
+  Since this project is an AI project and contains Machine Learning, another language, which can utilise the CPU and RAM best, would be a more sensible choice. But for most of other languages, like JAVA od C++, C#, etc. I had more limits for Visualisation part and it's needed to put more efforts to implement the game process on the screen. Therefore with JavaScript I did all the visualisation and AI process faster together but due to web browser restrictions, it cannot utilise all the CPU capabilities for learning. One another proper language choicw coule be Python, since it's powerful in visualisation and can utilise the CPU and RAM better than JavaScript.
   
 #### Why Genetic Algorithm project?
   Why not! Due to COVID-19 restrictions, these days I had a lot of spare time in HOME to think about a hobby or fun project!
@@ -111,16 +114,16 @@ Since all the data is on the client side, you could easy watch the algorithm and
  
 ### My custom Chromosome to PLAY with -- not useful for learning
   ```javascript
-  myChromosome = { 
-    a: 5.44,
-    b: 6.17,
-    c: 5.85,
-    d: 3.9,
-    e: -5.37,
-    f: 3.53,
-    g: -5.76,
-    h: -0.66,
-  };
+  myChromosome = {
+    "a": -6.36,
+    "b": -7.96,
+    "c": -3.64,
+    "d": -8.84,
+    "e": -0.95,
+    "f": -3.73,
+    "g": 6.66,
+    "h": 1.15
+};
   ```
   Define your chromosome; then the custome play would use to solve the puzzle  
   It is undefined by default  
