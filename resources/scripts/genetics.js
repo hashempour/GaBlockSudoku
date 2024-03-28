@@ -84,14 +84,15 @@ let HALT_LEARNING = false;
 let LEARN_IN_PROGRESS = false;
 
 const GENETICS = {
-  // aX + bY + cZ + dW + eQ + f + gT + hS = 0
+  // Formula: aX + bY + cZ + dW + eQ + f + gT + hS + iP  = 0
   // X: cols integrity (%)
   // Y: rows integrity (%)
-  // X: 9-blocks integrity (%)
+  // Z: 9-blocks integrity (%)
   // W: total occupation (%)
   // Q: selected element occupation (%)
   // T: row/col/blockSet completeness (%)
   // S: board total integrity (%)
+  // P: priority of sides and corner occupation (%)
 
   population: [], // Array of Chromosomes of { a, b, c, d, e, f, g, h }
   populationGameScore: [],
@@ -99,7 +100,7 @@ const GENETICS = {
   avgTotalSuccessRate: {}, // { best, worst, count }
   currentPopulation: -1,
   POPULATION_COUNT: 100,
-  CHROMOSOME_DNA_COUNT: 8,
+  CHROMOSOME_DNA_COUNT: 9,
   CHROMOSOME_DNA_RANGE: 2100, // -10.00 .. 0.00 .. +10.00
 
   MUTATION_RATE: 0.4,
@@ -131,6 +132,7 @@ const GENETICS = {
           f: GENETICS.utils.getRandDNA(),
           g: GENETICS.utils.getRandDNA(),
           h: GENETICS.utils.getRandDNA(),
+          i: GENETICS.utils.getRandDNA(),
         });
 
         GENETICS.populationGameScore.push(0);
@@ -289,7 +291,8 @@ const GENETICS = {
         e: randPosition < 5 ? chromosome1.e : chromosome2.e,
         f: randPosition < 6 ? chromosome1.f : chromosome2.f,
         g: randPosition < 7 ? chromosome1.g : chromosome2.g,
-        h: chromosome2.h,
+        h: randPosition < 8 ? chromosome1.h : chromosome2.h,
+        i: chromosome2.i,
       };
     },
     getNewChild: function (
@@ -355,6 +358,12 @@ const GENETICS = {
             : Math.random() < 0.5
             ? chromosome1.h
             : chromosome2.h,
+        i:
+          mutationDnaIndex === 7
+            ? GENETICS.utils.getRandDNA()
+            : Math.random() < 0.5
+            ? chromosome1.i
+            : chromosome2.i,
       };
     },
   },
@@ -673,8 +682,10 @@ function getCalculatedValue(element, position, chromosome, boardState) {
     chromosome.e * getOccupationOfElement(element) +
     chromosome.f +
     chromosome.g * PLAY_INFO.statistics.getT(boardStateSimulation) +
-    chromosome.h * PLAY_INFO.statistics.getS(boardStateSimulation).divValue
+    chromosome.h * PLAY_INFO.statistics.getS(boardStateSimulation).divValue +
+    chromosome.i * PLAY_INFO.statistics.getP(boardStateSimulation)
   );
+
 }
 
 function simulateBoardState(element, position, boardState) {

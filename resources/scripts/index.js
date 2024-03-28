@@ -21,98 +21,26 @@ const PLAY_INFO = {
   avgScore: 0,
   avgScoreList: [],
   currentElements: [],
-  boardState: [
-    // Block Set No
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0, // 0    1   2
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+  boardState: [                           // Block Set No
+  0, 0, 0,    0, 0, 0,    0, 0, 0,        // 0    1     2
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
 
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0, // 3    4   5
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+  0, 0, 0,    0, 0, 0,    0, 0, 0,        // 3    4     5
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
 
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0, // 6    7   8
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+  0, 0, 0,    0, 0, 0,    0, 0, 0,        // 6    7     8
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
+  0, 0, 0,    0, 0, 0,    0, 0, 0,
   ],
   // X: avg sparsity of cols
   // Y: avg sparsity of rows
-  // X: avg sparsity of 9-blocks
+  // Z: avg sparsity of 9-blocks
   // W: total occupation
   // T: avg complete sets ( row / col / 9-block )
   // S: avg total board integrity
+  // P: side of the board occupation
   statistics: {
     // column integrity
     getX: function (boardState) {
@@ -377,7 +305,7 @@ const PLAY_INFO = {
           (GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK +
             1 -
             Number(key)) *
-          resultSet.divCount[key];
+            resultSet.divCount[key];
       }
 
       resultSet.divValue /=
@@ -386,6 +314,31 @@ const PLAY_INFO = {
 
       return resultSet;
     },
+    // total board integrity
+    getP: function (boardState) {
+      if (boardState === undefined) {
+        boardState = PLAY_INFO.boardState;
+      }
+
+      let result = .0;
+
+      for (let i = 0; i < GAME_INFO.BOARD_SIZE_BLOCK; i++) {
+        for (let j =  0; j < GAME_INFO.BOARD_SIZE_BLOCK; j++) {
+          result += 
+            ( 
+              Math.abs( i - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) ) +
+              Math.abs( j - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) )
+            ) * boardState[ i * GAME_INFO.BOARD_SIZE_BLOCK + j ]
+        }
+      }
+
+
+      // normalise the number
+      result /= ( GAME_INFO.BOARD_SIZE_BLOCK - 1 ) * boardState.length;
+      result = Math.round(result * 100) / 100; // 2 decimal precision
+
+      return result;
+    }
   },
   utils: {
     getBlockNo: function (row, col) {
