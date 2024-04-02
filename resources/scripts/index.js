@@ -6,12 +6,12 @@ var myChromosome = null; // it will be defined either by user or during the lear
 const SVG_NAMESPACE_URI = "http://www.w3.org/2000/svg";
 
 const GAME_INFO = {
-  BOARD_AREA: { SIZE: { X: 450, Y: 450 } },
-  ELEMENT_AREA: { SIZE: { X: 450, Y: 100 } },
-  ALL_ELEMENT_AREA: { SIZE: { X: 450, Y: 240 } },
+  BOARD_AREA: { SIZE: { X: 400, Y: 400 } },
+  ELEMENT_AREA: { SIZE: { X: 400, Y: 100 } },
+  ALL_ELEMENT_AREA: { SIZE: { X: 400, Y: 240 } },
   GUIDE_LINE_WIDTH: { PRIMARY: 3, SECONDARY: 1 },
   BLOCK_SIZE_PX: 50,
-  BOARD_SIZE_BLOCK: 9,
+  BOARD_SIZE_BLOCK: 8,
   BOARD_BLOCK_SET_WIDTH: 3,
 };
 
