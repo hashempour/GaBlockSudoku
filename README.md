@@ -21,7 +21,7 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
 ## Algorithm
 
 ### The equation
-  aX + bY + cZ + dW + eQ + f + gT + hS = 0
+  aX + bY + cZ + dW + eQ + f + gT + hS + iP = 0
   
   X: cols integrity (%)  
   Y: rows integrity (%)  
@@ -30,13 +30,14 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
   Q: selected element occupation (%)  
   T: row/col/blockSet completeness (%)    
   S: board total integrity (%)
+  P: priority of sides and corner occupation (%)
   
 ### The DNA
-  Chromosome DNA: { a, b, c, d, e, f, g, h }  
-  All DNAs are random float numbers between -10.00 and +10.00 (with 2 number precisions)  
+  Chromosome DNA: { a, b, c, d, e, f, g, h, i }  
+  All DNAs are random float numbers between -50.50 and +50.50 (with 2 number precisions)  
   
 ### ETC.
-  Default Population Count: 100
+  Default Population Count: 25
   
   
 ## Technical Hint
