@@ -1,4 +1,4 @@
-# GaBlockSudoku - Genetic Algortihm (AI) for BockSudoku Puzzle solving
+# GaBlockSudoku - Genetic Algortihm (AI) Learning for BlockSudoku Puzzle solving
 
 A complete JavaScript project for solving Block Sudoku puzzle via Machine Learning Genetic Algorithm.
 
