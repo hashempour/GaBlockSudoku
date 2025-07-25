@@ -648,7 +648,7 @@ function playARound(chromosome, elements) {
 
   if (!successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
     // only for normal play (not learning)
-    alert("GANE OVER!");
+    alert("GAME OVER!");
   } else if (successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
     // only for normal play (not learning)
     // we shoukd choose 3 other random elements for the next round
