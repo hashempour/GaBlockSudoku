@@ -99,7 +99,7 @@ const GENETICS = {
   populationAvgSuccessRates: [], // [ { s: successRate, c: ageCount }, ... ]
   avgTotalSuccessRate: {}, // { best, worst, count }
   currentPopulation: -1,
-  POPULATION_COUNT: 100,
+  POPULATION_COUNT: 25,
   CHROMOSOME_DNA_COUNT: 9,
   CHROMOSOME_DNA_RANGE: 10100, // -50.50 .. 0.00 .. +50.50
 
