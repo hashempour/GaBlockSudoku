@@ -12,7 +12,7 @@ const GAME_INFO = {
     GUIDE_LINE_WIDTH: { PRIMARY: 3, SECONDARY: 1 },
     BLOCK_SIZE_PX: 50,
     BOARD_SIZE_BLOCK: 9,
-    BOARD_BLOCK_SET_WIDTH : 3
+    BOARD_BLOCK_SET_WIDTH: 3
 };
 
 const PLAY_INFO = {
@@ -30,9 +30,9 @@ const PLAY_INFO = {
         0, 0, 0,    0, 0, 0,    0, 0, 0,
         0, 0, 0,    0, 0, 0,    0, 0, 0,
 
-        0, 0, 0,    0, 0, 0,    0, 0, 0,        // 6    7   8
-        0, 0, 0,    0, 0, 0,    0, 0, 0,
-        0, 0, 0,    0, 0, 0,    0, 0, 0
+        0, 0, 0, 0, 0, 0, 0, 0, 0,        // 6    7   8
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
     ],
     // X: avg sparsity of cols
     // Y: avg sparsity of rows
@@ -42,7 +42,7 @@ const PLAY_INFO = {
     // S: avg total board integrity
     statistics: {
         // column integrity
-        getX: function( boardState ) {
+        getX: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -77,7 +77,7 @@ const PLAY_INFO = {
             return resultSet;
         },
         // row integrity
-        getY: function( boardState ) {
+        getY: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -112,7 +112,7 @@ const PLAY_INFO = {
             return resultSet;
         },
         // 9 sets integrity
-        getZ: function( boardState ) {
+        getZ: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -136,9 +136,9 @@ const PLAY_INFO = {
                     traverseMap[ row * GAME_INFO.BOARD_BLOCK_SET_WIDTH + col ] = true;
 
                     gapCount = 1
-                        + getMatrixGapCount( blockSetOffset, row + 1  , col )
-                        + getMatrixGapCount( blockSetOffset, row      , col + 1 );
-                        //+ getMatrixGapCount( blockSetOffset, row + 1  , col + 1 );        TODO: oriental should be considered later
+                        + getMatrixGapCount( blockSetOffset, row + 1, col )
+                        + getMatrixGapCount( blockSetOffset, row, col + 1 );
+                    //+ getMatrixGapCount( blockSetOffset, row + 1  , col + 1 );        TODO: oriental should be considered later
                 }
 
                 return gapCount;
@@ -173,14 +173,14 @@ const PLAY_INFO = {
             return resultSet;
         },
         // occupation percentage
-        getW: function( boardState ) {
+        getW: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
 
             let result = 0;
 
-            boardState.forEach( function( state ) {
+            boardState.forEach( function ( state ) {
                 result += state;
             } );
 
@@ -190,7 +190,7 @@ const PLAY_INFO = {
             return result;
         },
         // occupation on sets (row / col / blockSet)
-        getT: function( boardState ) {
+        getT: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -213,7 +213,7 @@ const PLAY_INFO = {
             return result;
         },
         // total board integrity
-        getS: function( boardState ) {
+        getS: function ( boardState ) {
             if ( boardState === undefined ) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -243,9 +243,9 @@ const PLAY_INFO = {
                     traverseMap[ cellIndex ] = true;
 
                     gapCount = 1    // add current cell state
-                    + getMatrixGapCount( { x: offset.x + 1, y: offset.y     } )
-                    + getMatrixGapCount( { x: offset.x    , y: offset.y + 1 } )
-                    + getMatrixGapCount( { x: offset.x + 1, y: offset.y + 1 } );        // TODO: oriental should be considered later
+                        + getMatrixGapCount( { x: offset.x + 1, y: offset.y } )
+                        + getMatrixGapCount( { x: offset.x, y: offset.y + 1 } )
+                        + getMatrixGapCount( { x: offset.x + 1, y: offset.y + 1 } );        // TODO: oriental should be considered later
                 }
 
                 return gapCount;
@@ -274,7 +274,7 @@ const PLAY_INFO = {
         }
     },
     utils: {
-        getBlockNo: function ( row, col  ) {
+        getBlockNo: function ( row, col ) {
             return Math.floor( col / GAME_INFO.BOARD_BLOCK_SET_WIDTH ) + Math.floor( row / GAME_INFO.BOARD_BLOCK_SET_WIDTH ) * GAME_INFO.BOARD_BLOCK_SET_WIDTH
         },
         getBlockSetStates: function ( blockSetIndex, boardState ) {
@@ -322,7 +322,7 @@ const PLAY_INFO = {
                 boardState = PLAY_INFO.boardState;
             }
 
-            col = Number(col);  // to be sure of type
+            col = Number( col );  // to be sure of type
             let resultSet = {};
 
             for ( let row = 0; row < GAME_INFO.BOARD_SIZE_BLOCK; row++ ) {
@@ -335,7 +335,7 @@ const PLAY_INFO = {
     }
 };
 
-$( document ).ready(function () {
+$( document ).ready( function () {
     prepareStageArea();
     prepareElementArea();
 
@@ -346,21 +346,21 @@ $( document ).ready(function () {
     $( '#buttonPlayARound' ).on( 'click', buttonPlayARound_Click );
     $( '#buttonLearn' ).on( 'click', buttonLearn_Click );
 
-    $( '#checkboxGameMode' ).on( 'click', checkboxGameMode_Click ).on( 'change', checkboxGameMode_Change ).prop( 'checked', true).trigger( 'change' );
+    $( '#checkboxGameMode' ).on( 'click', checkboxGameMode_Click ).on( 'change', checkboxGameMode_Change ).prop( 'checked', true ).trigger( 'change' );
 
     $( '#numberPlayTime' ).val( PLAY_TIME_MS ).on( 'change', numberPlayTime_Change );
     $( '#checkboxFastForward' ).on( 'change', checkboxFastForward_Change );
-    $( '#buttonGoForLearn').on( 'click', buttonGoForLearn_Click );
+    $( '#buttonGoForLearn' ).on( 'click', buttonGoForLearn_Click );
     $( '#buttonSubmitChromosomeData' ).on( 'click', buttonSubmitChromosomeData_Click );
 
-});
+} );
 
 
 function prepareStageArea() {
-    let $svgStage = $("#svgStage");
+    let $svgStage = $( "#svgStage" );
 
-    for ( var x = 1; x < GAME_INFO.BOARD_AREA.SIZE.X / GAME_INFO.BLOCK_SIZE_PX ; x++ ) {
-        $( document.createElementNS( SVG_NAMESPACE_URI , 'line' ) ).attr( {
+    for ( var x = 1; x < GAME_INFO.BOARD_AREA.SIZE.X / GAME_INFO.BLOCK_SIZE_PX; x++ ) {
+        $( document.createElementNS( SVG_NAMESPACE_URI, 'line' ) ).attr( {
             id: 'guideLine_v' + x,
             x1: x * GAME_INFO.BLOCK_SIZE_PX,
             y1: 0,
@@ -371,7 +371,7 @@ function prepareStageArea() {
         } ).appendTo( $svgStage );
     }
     for ( var y = 1; y < GAME_INFO.BOARD_AREA.SIZE.Y / GAME_INFO.BLOCK_SIZE_PX; y++ ) {
-        $( document.createElementNS( SVG_NAMESPACE_URI , 'line' ) ).attr( {
+        $( document.createElementNS( SVG_NAMESPACE_URI, 'line' ) ).attr( {
             id: 'guideLine_h' + y,
             x1: 0,
             y1: y * GAME_INFO.BLOCK_SIZE_PX,
@@ -382,9 +382,9 @@ function prepareStageArea() {
         } ).appendTo( $svgStage );
     }
 
-    for ( var i = 0; i < GAME_INFO.BOARD_AREA.SIZE.X / GAME_INFO.BLOCK_SIZE_PX ; i++ ) {
+    for ( var i = 0; i < GAME_INFO.BOARD_AREA.SIZE.X / GAME_INFO.BLOCK_SIZE_PX; i++ ) {
         for ( var j = 0; j < GAME_INFO.BOARD_AREA.SIZE.Y / GAME_INFO.BLOCK_SIZE_PX; j++ ) {
-            $(document.createElementNS(SVG_NAMESPACE_URI, 'rect')).attr({
+            $( document.createElementNS( SVG_NAMESPACE_URI, 'rect' ) ).attr( {
                 id: 'stageBlock_' + j + '_' + i,
                 class: 'elementBlock',
                 x: GAME_INFO.BLOCK_SIZE_PX * i,
@@ -393,7 +393,7 @@ function prepareStageArea() {
                 width: GAME_INFO.BLOCK_SIZE_PX,
                 stroke: 'gray',
                 'stroke-width': GAME_INFO.GUIDE_LINE_WIDTH.SECONDARY
-            }).on( 'click', stageBlock_Click).prop( 'data-row', j ).prop( 'data-col', i ).appendTo( $svgStage );
+            } ).on( 'click', stageBlock_Click ).prop( 'data-row', j ).prop( 'data-col', i ).appendTo( $svgStage );
         }
     }
 
@@ -413,9 +413,9 @@ function drawNewElements( elements ) {
     let elementDrawSpace = GAME_INFO.ELEMENT_AREA.SIZE.X / elements.length;
 
     if ( VISUALISE === 2 ) {
-        elements.forEach(function (element, index) {
-            drawElement('elementBlock' + index, element, {x: elementDrawSpace * index + 20, y: 10});
-        });
+        elements.forEach( function ( element, index ) {
+            drawElement( 'elementBlock' + index, element, { x: elementDrawSpace * index + 20, y: 10 } );
+        } );
     }
 
     return elements;
@@ -429,7 +429,7 @@ function drawElement( id, element, centerPoint ) {
         for ( var j = 0; j < ELEMENT_PATTERN_SIZE; j++ ) {
             if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
                 $( document.createElementNS( SVG_NAMESPACE_URI, 'rect' ) ).attr( {
-                    id: id + '_' +  i + '_' + j,
+                    id: id + '_' + i + '_' + j,
                     class: 'elementBlock active ' + element.KEY,
                     x: centerPoint.x + blockSize * i,
                     y: centerPoint.y + blockSize * j,
@@ -450,7 +450,7 @@ function isPossibleToDrawOnStage( element, offsetStagePoint, boardState ) {
     for ( var i = 0; i < ELEMENT_PATTERN_SIZE; i++ ) {
         for ( var j = 0; j < ELEMENT_PATTERN_SIZE; j++ ) {
             if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
-                let boardStateIndex = (offsetStagePoint.y + j) * GAME_INFO.BOARD_SIZE_BLOCK + (offsetStagePoint.x + i);
+                let boardStateIndex = ( offsetStagePoint.y + j ) * GAME_INFO.BOARD_SIZE_BLOCK + ( offsetStagePoint.x + i );
                 if ( offsetStagePoint.y + j < 0 || offsetStagePoint.y + j >= GAME_INFO.BOARD_SIZE_BLOCK
                     || offsetStagePoint.x + i < 0 || offsetStagePoint.x + i >= GAME_INFO.BOARD_SIZE_BLOCK
                     || boardState[ boardStateIndex ] ) {
@@ -473,9 +473,9 @@ function drawElementOnStage( element, offsetStagePoint, additionalClass ) {
     };
 
     if ( isPossibleToDrawOnStage( element, offsetStagePoint ) ) {
-        for (var i = 0; i < ELEMENT_PATTERN_SIZE; i++) {
-            for (var j = 0; j < ELEMENT_PATTERN_SIZE; j++) {
-                if (element.PATTERN[j * ELEMENT_PATTERN_SIZE + i]) {
+        for ( var i = 0; i < ELEMENT_PATTERN_SIZE; i++ ) {
+            for ( var j = 0; j < ELEMENT_PATTERN_SIZE; j++ ) {
+                if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
                     resultSet.changeCount += toggleStageBlockState( offsetStagePoint.y + j, offsetStagePoint.x + i, 1, additionalClass );
                     resultSet.affectedRows[ offsetStagePoint.y + j ] = true;    // dummy value; unique keys are important
                     resultSet.affectedCols[ offsetStagePoint.x + i ] = true;    // dummy value; unique keys are important
@@ -503,19 +503,19 @@ function toggleStageBlockState( j, i, state, additonalClass, boardState, isSimul
         isSimulate = false;
     }
 
-    i = Number(i);
-    j = Number(j);
+    i = Number( i );
+    j = Number( j );
     let changed = 0;
     let $stageBlock;
     if ( VISUALISE > 0 && !isSimulate ) {
-        $stageBlock = $( '#stageBlock_' + j + '_' + i);
+        $stageBlock = $( '#stageBlock_' + j + '_' + i );
     }
 
-    if ( boardState[j * GAME_INFO.BOARD_SIZE_BLOCK + i] !== state ) {
+    if ( boardState[ j * GAME_INFO.BOARD_SIZE_BLOCK + i ] !== state ) {
         if ( VISUALISE === 2 && !isSimulate ) {
-            $stageBlock.toggleClass('active ' + additonalClass, state === 1);
+            $stageBlock.toggleClass( 'active ' + additonalClass, state === 1 );
         }
-        boardState[j * GAME_INFO.BOARD_SIZE_BLOCK + i] = state;
+        boardState[ j * GAME_INFO.BOARD_SIZE_BLOCK + i ] = state;
 
         changed = 1;
     }
@@ -534,8 +534,8 @@ function addScore( value ) {
 
 function updateScore() {
     if ( VISUALISE > 0 ) {
-        $('#labelScore').text(PLAY_INFO.score);
-        $('#labelHighScore').text(PLAY_INFO.hiScore);
+        $( '#labelScore' ).text( PLAY_INFO.score );
+        $( '#labelHighScore' ).text( PLAY_INFO.hiScore );
         //$('#labelX').text(PLAY_INFO.statistics.getX().divValue);
         //$('#labelY').text(PLAY_INFO.statistics.getY().divValue);
         //$('#labelZ').text(PLAY_INFO.statistics.getZ().divValue);
@@ -545,23 +545,23 @@ function updateScore() {
 
 
 function putRandom() {
-    $('.elementBlock.fresh').removeClass( 'fresh' );
+    $( '.elementBlock.fresh' ).removeClass( 'fresh' );
 
     let unsuccessful = [];
 
-    drawNewElements().forEach( function( element, index ) {
+    drawNewElements().forEach( function ( element, index ) {
         let tryCount = 0;
         let randPosition;
 
         do {
             randPosition = {
-                x: Math.floor(Math.random() * (GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2)) - ELEMENT_PATTERN_SIZE,
-                y: Math.floor(Math.random() * (GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2)) - ELEMENT_PATTERN_SIZE
+                x: Math.floor( Math.random() * ( GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2 ) ) - ELEMENT_PATTERN_SIZE,
+                y: Math.floor( Math.random() * ( GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2 ) ) - ELEMENT_PATTERN_SIZE
             };
         } while (
             !isPossibleToDrawOnStage( element, randPosition )
             && tryCount++ < 100
-            );
+        );
 
         //console.debug( tryCount );
         if ( tryCount < 100 ) {
@@ -572,7 +572,7 @@ function putRandom() {
         } else {
             unsuccessful.push( index );
         }
-    });
+    } );
 
     return unsuccessful;
 }
@@ -591,14 +591,14 @@ function checkForCleanup( boardState, isSimulate ) {
     // FIND TO CLEAN-UP
 
     // find block sets to cleanup
-    for ( var key in [0,1,2,3,4,5,6,7,8,9] ) {
+    for ( var key in [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ) {
         if ( isAllCellsOccupied( PLAY_INFO.utils.getBlockSetStates( key, boardState ) ) ) {
             cleanupSet.blockIndexes.push( key );
         }
     }
 
     // find rows to cleanup
-    for ( var key in [0,1,2,3,4,5,6,7,8,9] ) {
+    for ( var key in [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ) {
         if ( isAllCellsOccupied( PLAY_INFO.utils.getRowSetStates( key, boardState ) ) ) {
             cleanupSet.rowIndexes.push( key );
         }
@@ -607,7 +607,7 @@ function checkForCleanup( boardState, isSimulate ) {
     //console.debug( 'as', affectionState);
 
     // find cols to cleanup
-    for ( var key in [0,1,2,3,4,5,6,7,8,9] ) {
+    for ( var key in [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] ) {
         if ( isAllCellsOccupied( PLAY_INFO.utils.getColSetStates( key, boardState ) ) ) {
             cleanupSet.colIndexes.push( key );
         }
@@ -644,29 +644,29 @@ function cleanUp( cleanupSet, boardState, isSimulate ) {
 
 
     // blockset
-    cleanupSet.blockIndexes.forEach( function( index ) {
+    cleanupSet.blockIndexes.forEach( function ( index ) {
         cleanupBlockSet( index, boardState, isSimulate );
         if ( !isSimulate ) {
             addScore( GAME_INFO.BOARD_SIZE_BLOCK * 2 );  // 9 * 2 -> BlockSet count
         }
-    });
+    } );
 
     // row
-    cleanupSet.rowIndexes.forEach( function( index ) {
+    cleanupSet.rowIndexes.forEach( function ( index ) {
         cleanupRowSet( index, boardState, isSimulate );
         if ( !isSimulate ) {
             addScore( GAME_INFO.BOARD_SIZE_BLOCK * 2 );  // 9 * 2 -> Row count
         }
-    });
+    } );
 
     // col
-    cleanupSet.colIndexes.forEach( function( index ) {
+    cleanupSet.colIndexes.forEach( function ( index ) {
         //console.debug( index );
         cleanupColSet( index, boardState, isSimulate );
         if ( !isSimulate ) {
             addScore( GAME_INFO.BOARD_SIZE_BLOCK * 2 );  // 9 * 2 -> Col count
         }
-    });
+    } );
 
 }
 
@@ -739,8 +739,8 @@ function resetBoard() {
 
     // visual elements
     if ( VISUALISE > 0 ) {
-        $('#svgElement .elementBlock').remove();
-        $('#svgStage .elementBlock').removeClass('active ').removeClass('fresh');
+        $( '#svgElement .elementBlock' ).remove();
+        $( '#svgStage .elementBlock' ).removeClass( 'active ' ).removeClass( 'fresh' );
 
         updateStageVisualState();
     }
@@ -752,7 +752,7 @@ function updateStageVisualState() {
     //console.debug( PLAY_INFO.boardState );
     for ( let i = 0; i < GAME_INFO.BOARD_SIZE_BLOCK; i++ ) {
         for ( let j = 0; j < GAME_INFO.BOARD_SIZE_BLOCK; j++ ) {
-            $( '#stageBlock_' + j + '_' + i).toggleClass( 'active' , PLAY_INFO.boardState[j * GAME_INFO.BOARD_SIZE_BLOCK + i] === 1 ).removeClass( 'fresh' );
+            $( '#stageBlock_' + j + '_' + i ).toggleClass( 'active', PLAY_INFO.boardState[ j * GAME_INFO.BOARD_SIZE_BLOCK + i ] === 1 ).removeClass( 'fresh' );
         }
     }
 }
@@ -763,15 +763,15 @@ function showAllElements() {
     // clean-up
     $svgElementRepo.find( '.elementBlock' ).remove();
 
-    let elementKeys = Object.keys ( ELEMENTS );
+    let elementKeys = Object.keys( ELEMENTS );
     let blockSize = GAME_INFO.BLOCK_SIZE_PX / 5;
     let elementDrawSpace = blockSize * ( ELEMENT_PATTERN_SIZE + 1 );
 
     let MAX_ELEMENT_IN_ROW = Math.floor( GAME_INFO.ALL_ELEMENT_AREA.SIZE.X / elementDrawSpace );
 
-    $svgElementRepo.attr({ height: elementDrawSpace * Math.ceil( elementKeys.length / MAX_ELEMENT_IN_ROW ) });
+    $svgElementRepo.attr( { height: elementDrawSpace * Math.ceil( elementKeys.length / MAX_ELEMENT_IN_ROW ) } );
 
-    elementKeys.forEach(function ( elementKey , index) {
+    elementKeys.forEach( function ( elementKey, index ) {
         let element = ELEMENTS[ elementKey ];
         let centerPoint = { x: elementDrawSpace * Math.floor( index / MAX_ELEMENT_IN_ROW ), y: elementDrawSpace * ( index % MAX_ELEMENT_IN_ROW ) };
 
@@ -779,7 +779,7 @@ function showAllElements() {
             for ( var j = 0; j < ELEMENT_PATTERN_SIZE; j++ ) {
                 if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
                     $( document.createElementNS( SVG_NAMESPACE_URI, 'rect' ) ).attr( {
-                        id: 'elementBlockRepo' + '_' +  i + '_' + j,
+                        id: 'elementBlockRepo' + '_' + i + '_' + j,
                         class: 'elementBlock active clickable ' + elementKey,
                         x: centerPoint.x + blockSize * i,
                         y: centerPoint.y + blockSize * j,
@@ -787,12 +787,12 @@ function showAllElements() {
                         width: blockSize,
                         'stroke-width': GAME_INFO.GUIDE_LINE_WIDTH.SECONDARY,
                         'data-key': elementKey
-                    }).on( 'click', repoElement_Click ).appendTo( $svgElementRepo );
+                    } ).on( 'click', repoElement_Click ).appendTo( $svgElementRepo );
                 }
             }
         }
 
-    });
+    } );
 }
 
 function changeGameMode( learnMode ) {
@@ -812,7 +812,7 @@ function isLearnMode() {
 }
 
 function changeLearnState( learning ) {
-    $( '#buttonLearn' ).text( learning ? 'STOP!' : 'LEARN...'  );
+    $( '#buttonLearn' ).text( learning ? 'STOP!' : 'LEARN...' );
     LEARN_IN_PROCESS = learning;
 }
 
@@ -825,7 +825,7 @@ function repoElement_Click() {
         PLAY_INFO.currentElements = []; // reset on 4th click
     }
 
-    PLAY_INFO.currentElements.push( ELEMENTS[ $( this).attr( 'data-key' ) ] );
+    PLAY_INFO.currentElements.push( ELEMENTS[ $( this ).attr( 'data-key' ) ] );
     if ( PLAY_INFO.currentElements.length >= 3 ) {
     }
 
@@ -834,7 +834,7 @@ function repoElement_Click() {
 
 function stageBlock_Click() {
     // custom state change by click
-    if ( !isLearnMode() &&  !LEARN_IN_PROGRESS ) {
+    if ( !isLearnMode() && !LEARN_IN_PROGRESS ) {
         let rowIndex = $( this ).prop( 'data-row' );
         let colIndex = $( this ).prop( 'data-col' );
 
@@ -920,7 +920,7 @@ function numberPlayTime_Change() {
 }
 
 function buttonGoForLearn_Click() {
-    $( '#labelGameMode').trigger( 'click' );
+    $( '#labelGameMode' ).trigger( 'click' );
 
     $( this ).parents( '.modal' ).removeClass( 'shown' );
 }
@@ -929,7 +929,7 @@ function buttonGoForLearn_Click() {
 function buttonSubmitChromosomeData_Click() {
     let isValid = true;
     let chromosomeData = {};
-    $( '#defineChromosomePanel_Body input[type="text"][data-key]' ).each( function() {
+    $( '#defineChromosomePanel_Body input[type="text"][data-key]' ).each( function () {
         let value = $( this ).val();
         let isNotNumber = value === null || value.trim().length === 0 || isNaN( $( this ).val() );
         $( this ).toggleClass( 'error', isNotNumber );
