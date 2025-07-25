@@ -29,7 +29,7 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
   W: total occupation (%)  
   Q: selected element occupation (%)  
   T: row/col/blockSet completeness (%)    
-  S: board total integrity (%)
+  S: board total integrity (%)    
   P: priority of sides and corner occupation (%)
   
 ### The DNA
