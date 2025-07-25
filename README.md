@@ -116,14 +116,15 @@ Since all the data is on the client side, you could easy watch the algorithm and
 ### My custom Chromosome to PLAY with -- not useful for learning
   ```javascript
   myChromosome = {
-    "a": -6.36,
-    "b": -7.96,
-    "c": -3.64,
-    "d": -8.84,
-    "e": -0.95,
-    "f": -3.73,
-    "g": 6.66,
-    "h": 1.15
+    "a": -48.9,
+    "b": -47.76,
+    "c": -21.78,
+    "d": 5.91,
+    "e": 7.97,
+    "f": -24.64,
+    "g": 27.83,
+    "h": 21.45,
+    "i": -34.18
 };
   ```
   Define your chromosome; then the custome play would use to solve the puzzle  
