@@ -21,7 +21,7 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
 ## Algorithm
 
 ### The equation
-  aX + bY + cZ + dW + eQ + f + gT + hS = 0
+  aX + bY + cZ + dW + eQ + f + gT + hS + iP = 0
   
   X: cols integrity (%)  
   Y: rows integrity (%)  
@@ -29,14 +29,15 @@ Try it yourself now! >> https://hashempour.github.io/GaBlockSudoku/
   W: total occupation (%)  
   Q: selected element occupation (%)  
   T: row/col/blockSet completeness (%)    
-  S: board total integrity (%)
+  S: board total integrity (%)    
+  P: priority of sides and corner occupation (%)
   
 ### The DNA
-  Chromosome DNA: { a, b, c, d, e, f, g, h }  
-  All DNAs are random float numbers between -10.00 and +10.00 (with 2 number precisions)  
+  Chromosome DNA: { a, b, c, d, e, f, g, h, i }  
+  All DNAs are random float numbers between -50.50 and +50.50 (with 2 number precisions)  
   
 ### ETC.
-  Default Population Count: 100
+  Default Population Count: 25
   
   
 ## Technical Hint
@@ -115,14 +116,15 @@ Since all the data is on the client side, you could easy watch the algorithm and
 ### My custom Chromosome to PLAY with -- not useful for learning
   ```javascript
   myChromosome = {
-    "a": -6.36,
-    "b": -7.96,
-    "c": -3.64,
-    "d": -8.84,
-    "e": -0.95,
-    "f": -3.73,
-    "g": 6.66,
-    "h": 1.15
+    "a": -48.9,
+    "b": -47.76,
+    "c": -21.78,
+    "d": 5.91,
+    "e": 7.97,
+    "f": -24.64,
+    "g": 27.83,
+    "h": 21.45,
+    "i": -34.18
 };
   ```
   Define your chromosome; then the custome play would use to solve the puzzle  
