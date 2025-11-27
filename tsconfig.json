@@ -1,0 +1,52 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./resources/scripts/ts",
+    "outDir": "./resources/scripts/js",
+    //"typeRoots": ["./resources/scripts/types"],
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "none",
+    "target": "es6",
+    //"types": [],
+    // Browser environment
+    "lib": ["es6", "dom"],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    //"types": ["jquery"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    //"declaration": true,
+    //"declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": false,
+    //"exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    //"jsx": "react-jsx",
+    //"verbatimModuleSyntax": true,
+    //"isolatedModules": true,
+    //"noUncheckedSideEffectImports": true,
+    //"moduleDetection": "force",
+    "skipLibCheck": true,
+  },
+  "include": [
+    "./resources/scripts/ts/**/*.ts",
+    "./resources/scripts/types/*.d.ts"
+  ]
+}
