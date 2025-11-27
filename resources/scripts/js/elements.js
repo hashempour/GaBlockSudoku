@@ -6,11 +6,11 @@ const ELEMENTS = {
         KEY: 'ELEMENT_1',
         OCCUPATION: 1,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     // VERTICAL LINE
@@ -18,44 +18,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_2V',
         OCCUPATION: 2,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_3V: {
         KEY: 'ELEMENT_3V',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_4V: {
         KEY: 'ELEMENT_4V',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_5V: {
         KEY: 'ELEMENT_5V',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false
         ]
     },
     // HORIZONTAL LINE
@@ -63,44 +63,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_2H',
         OCCUPATION: 2,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_3H: {
         KEY: 'ELEMENT_3H',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_4H: {
         KEY: 'ELEMENT_4H',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            1, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            true, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_5H: {
         KEY: 'ELEMENT_5H',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            true, true, true, true, true,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     // PLUS +
@@ -108,11 +108,11 @@ const ELEMENTS = {
         KEY: 'ELEMENT_PLUS',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, true, true, true, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     // T
@@ -120,44 +120,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_TU',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_TD: {
         KEY: 'ELEMENT_TD',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, true, true, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_TR: {
         KEY: 'ELEMENT_TR',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, true, true, true, false,
+            false, false, false, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_TL: {
         KEY: 'ELEMENT_TL',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, true, true, true, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     // CORNER FIVE 5
@@ -165,33 +165,33 @@ const ELEMENTS = {
         KEY: 'ELEMENT_C5TR',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, false, false, true, false,
+            false, false, false, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C5TL: {
         KEY: 'ELEMENT_C5TL',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, true, false, false, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C5DL: {
         KEY: 'ELEMENT_C5DL',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, true, false, false, false,
+            false, true, true, true, false,
+            false, false, false, false, false
         ]
     },
     // CORNER THREE 3
@@ -199,66 +199,66 @@ const ELEMENTS = {
         KEY: 'ELEMENT_C5DR',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, false, false, true, false,
+            false, true, true, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C3TR: {
         KEY: 'ELEMENT_C3TR',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, true, false,
+            false, false, false, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C3TL: {
         KEY: 'ELEMENT_C3TL',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, true, false, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C3DL: {
         KEY: 'ELEMENT_C3DL',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, true, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_C3DR: {
         KEY: 'ELEMENT_C3DR',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, false, true, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BOX: {
         KEY: 'ELEMENT_BOX',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, true, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     // L Vertical
@@ -266,44 +266,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_LVTR',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, true, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LVTL: {
         KEY: 'ELEMENT_LVTL',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LVDL: {
         KEY: 'ELEMENT_LVDL',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, true, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LVDR: {
         KEY: 'ELEMENT_LVDR',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, false, false,
+            false, false, true, true, false,
+            false, false, false, false, false
         ]
     },
     // L Horizontal
@@ -311,44 +311,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_LHTR',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LHTL: {
         KEY: 'ELEMENT_LHTL',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LHDL: {
         KEY: 'ELEMENT_LHDL',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_LHDR: {
         KEY: 'ELEMENT_LHDR',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, false, false, true, false,
+            false, false, false, false, false
         ]
     },
     // DIAGONAL REVERSE
@@ -356,112 +356,112 @@ const ELEMENTS = {
         KEY: 'ELEMENT_DIAG2R',
         OCCUPATION: 2,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_DIAG3R: {
         KEY: 'ELEMENT_DIAG3R',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, false, true, false, false,
+            false, false, false, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_DIAG4R: {
         KEY: 'ELEMENT_DIAG4R',
         OCCUPATION: 4,
         PATTERN: [
-            1, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 0, 0, 0
+            true, false, false, false, false,
+            false, true, false, false, false,
+            false, false, true, false, false,
+            false, false, false, true, false,
+            false, false, false, false, false
         ]
     },
     //ELEMENT_DIAG5R: {
     //    KEY: 'ELEMENT_DIAG5R',
     //    OCCUPATION: 5,
     //    PATTERN: [
-    //        1, 0, 0, 0, 0,
-    //        0, 1, 0, 0, 0,
-    //        0, 0, 1, 0, 0,
-    //        0, 0, 0, 1, 0,
-    //        0, 0, 0, 0, 1
-    //    ]
+    //         true, false, false, false, false,
+    //        false,  true, false, false, false,
+    //        false, false,  true, false, false,
+    //        false, false, false,  true, false,
+    //        false, false, false, false, 1
+    //    ] as ARRAY_25_BOOL
     //},
     // DIAGONAL REVERSE
     ELEMENT_DIAG2: {
         KEY: 'ELEMENT_DIAG2',
         OCCUPATION: 2,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, false, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_DIAG3: {
         KEY: 'ELEMENT_DIAG3',
         OCCUPATION: 3,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, true, false,
+            false, false, true, false, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_DIAG4: {
         KEY: 'ELEMENT_DIAG4',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 1,
-            0, 0, 0, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, true,
+            false, false, false, true, false,
+            false, false, true, false, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     //ELEMENT_DIAG5: {
     //    KEY: 'ELEMENT_DIAG5',
     //    OCCUPATION: 5,
     //    PATTERN: [
-    //        0, 0, 0, 0, 1,
-    //        0, 0, 0, 1, 0,
-    //        0, 0, 1, 0, 0,
-    //        0, 1, 0, 0, 0,
-    //        1, 0, 0, 0, 0
-    //    ]
+    //        false, false, false, false,  true,
+    //        false, false, false,  true, false,
+    //        false, false,  true, false, false,
+    //        false,  true, false, false, false,
+    //         true, false, false, false, false
+    //    ] as ARRAY_25_BOOL
     //},
     // ZED
     ELEMENT_ZEDH: {
         KEY: 'ELEMENT_ZEDH',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, false, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_ZEDV: {
         KEY: 'ELEMENT_ZEDV',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, true, true, false, false,
+            false, true, false, false, false,
+            false, false, false, false, false
         ]
     },
     // S
@@ -469,22 +469,22 @@ const ELEMENTS = {
         KEY: 'ELEMENT_SH',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, true, false,
+            false, true, true, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_SV: {
         KEY: 'ELEMENT_SV',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, false, false,
+            false, true, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     // BOWL
@@ -492,44 +492,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_BOWLT',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 0, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, false, true, false,
+            false, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BOWLD: {
         KEY: 'ELEMENT_BOWLD',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 0, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, true, false, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BOWLR: {
         KEY: 'ELEMENT_BOWLR',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, true, false,
+            false, false, true, false, false,
+            false, false, true, true, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BOWLL: {
         KEY: 'ELEMENT_BOWLL',
         OCCUPATION: 5,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, true, true, false, false,
+            false, false, true, false, false,
+            false, true, true, false, false,
+            false, false, false, false, false
         ]
     },
     // BUTTON
@@ -537,44 +537,44 @@ const ELEMENTS = {
         KEY: 'ELEMENT_BUTTONT',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, true, true, true, false,
+            false, false, false, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BUTTOND: {
         KEY: 'ELEMENT_BUTTOND',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, true, true, true, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BUTTONR: {
         KEY: 'ELEMENT_BUTTONR',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 1, 1, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, false, true, true, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     },
     ELEMENT_BUTTONL: {
         KEY: 'ELEMENT_BUTTONL',
         OCCUPATION: 4,
         PATTERN: [
-            0, 0, 0, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 0, 1, 0, 0,
-            0, 0, 0, 0, 0
+            false, false, false, false, false,
+            false, false, true, false, false,
+            false, true, true, false, false,
+            false, false, true, false, false,
+            false, false, false, false, false
         ]
     }
 };

@@ -463,7 +463,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
       elements[ secondElementIndex ],
       elements[ thirdElementIndex ],
     ] as ELEMENT[];
-    //debugger;   // check order
 
     // try to simulate the chosen order
 
@@ -511,8 +510,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
               )
             );
             if ( isNaN( calcValue ) ) {
-              // TODO: test for debug
-              //debugger;
               console.debug(
                 "CALC isNaN",
                 element,
@@ -549,7 +546,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
         );
         checkForCleanup( boardStateSimulation, true );
 
-        //debugger;   // check board state
       } else {
         // unsuccessful tries for this element!!
         // skip current order
@@ -558,7 +554,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
     }
 
     // sum up the order round
-    //debugger;
     if ( currentOrderState.bestPositions.length === 3 ) {
       // successful order try
       // check the order-round performance
@@ -615,8 +610,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
       }
     });
 
-    //debugger;
-
     successfulPlay = true;
   } else {
     // unsuccessful!! cannot find even one acceptable order
@@ -671,7 +664,6 @@ function getCalculatedValue(
     chromosome.h * PLAY_INFO.statistics.getS( boardStateSimulation ).divValue +
     chromosome.i * PLAY_INFO.statistics.getP( boardStateSimulation )
   );
-
 }
 
 function simulateBoardState( element: ELEMENT, position: Cordinate, boardState: BOARD_STATE ) {
@@ -681,7 +673,7 @@ function simulateBoardState( element: ELEMENT, position: Cordinate, boardState: 
       if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
         boardState[
           ( position.y + j ) * GAME_INFO.BOARD_SIZE_BLOCK + position.x + i
-        ];
+        ] = true;
       }
     }
   }

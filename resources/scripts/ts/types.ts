@@ -8,6 +8,7 @@ type _FixedArray<T, N extends number, R extends unknown[]> =
 type BOARD_STATE = FixedArray<boolean, 81>;
 type ARRAY_9_NUM = FixedArray<number, 9>;
 type ARRAY_9_BOOL = FixedArray<boolean, 9>;
+type ARRAY_25_BOOL = FixedArray<boolean, 25>
 
 class InvalidStateError extends Error {
     constructor(message: string) {
@@ -146,13 +147,12 @@ class DivState {
         this.divCount[ index ] += count;
     }
 
-    summerize9SetValue(): void {
+    summerize9SetValue( maxCellValue: number ): void {
         for ( let index = 0; index < this.divCount.length; index++ ) {
-            this.divValue += ( 10 - index ) * ( this.divCount[ index ] ?? 0 );
+            this.divValue += this.divCount[ index ];
         }
 
-        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * 45; // normalise the value according to the worst case value ( 9 * 45 )
-        this.divValue = Math.round( this.divValue * 100 ) / 100; // 2 decimal precision
+        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * maxCellValue; // normalise the value according to the worst case value (e.g. 9 * 45 )
     }
 }
 
@@ -211,12 +211,20 @@ class TotalSuccessRate {
 }
 
 class BoardIntegrityResult {
-    divCount: number[]; // [ 0 .. 80 ]; to be initialised ahead
+    divCount: number[]; // [ 0 .. 80 ]; to be initialised
     divValue: number;
 
     constructor() {
         this.divCount = new Array( 81 ).fill( 0 );
         this.divValue = 0;
+    }
+
+    addCount( index: number, count: number ): void {
+        if ( index >= this.divCount.length ) {
+            throw new InvalidStateError( "index out of bound! " + index + " > " + this.divCount.length );
+        }
+
+        this.divCount[ index ] += count;
     }
 }
 

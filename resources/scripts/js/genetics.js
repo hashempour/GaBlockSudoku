@@ -352,7 +352,6 @@ function playARound(chromosome, elements) {
             elements[secondElementIndex],
             elements[thirdElementIndex],
         ];
-        //debugger;   // check order
         // try to simulate the chosen order
         const MAX = GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2;
         // make a copy of current board state for calculation score simulation
@@ -376,8 +375,6 @@ function playARound(chromosome, elements) {
                         // simulate the element in current position
                         let calcValue = Math.abs(getCalculatedValue(element, new Cordinate(i, j), chromosome, boardStateSimulation));
                         if (isNaN(calcValue)) {
-                            // TODO: test for debug
-                            //debugger;
                             console.debug("CALC isNaN", element, { x: i, y: j }, chromosome, boardStateSimulation);
                         }
                         if (bestPractice.value === null || bestPractice.value > calcValue) {
@@ -400,7 +397,6 @@ function playARound(chromosome, elements) {
                 //drawElementOnStage( bestPractice.element, bestPractice.position, 'fresh' );
                 simulateBoardState(bestPractice.element, bestPractice.position, boardStateSimulation);
                 checkForCleanup(boardStateSimulation, true);
-                //debugger;   // check board state
             }
             else {
                 // unsuccessful tries for this element!!
@@ -409,7 +405,6 @@ function playARound(chromosome, elements) {
             }
         }
         // sum up the order round
-        //debugger;
         if (currentOrderState.bestPositions.length === 3) {
             // successful order try
             // check the order-round performance
@@ -448,7 +443,6 @@ function playARound(chromosome, elements) {
                 checkForCleanup();
             }
         });
-        //debugger;
         successfulPlay = true;
     }
     else {
@@ -501,7 +495,7 @@ function simulateBoardState(element, position, boardState) {
     for (var i = 0; i < ELEMENT_PATTERN_SIZE; i++) {
         for (var j = 0; j < ELEMENT_PATTERN_SIZE; j++) {
             if (element.PATTERN[j * ELEMENT_PATTERN_SIZE + i]) {
-                boardState[(position.y + j) * GAME_INFO.BOARD_SIZE_BLOCK + position.x + i];
+                boardState[(position.y + j) * GAME_INFO.BOARD_SIZE_BLOCK + position.x + i] = true;
             }
         }
     }

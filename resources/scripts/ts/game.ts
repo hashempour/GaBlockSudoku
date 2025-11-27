@@ -5,6 +5,9 @@ let DEBUG_MODE: DEBUGMODE_STATE = DEBUGMODE_STATE.NONE;
 // it will be defined either by user or during the learning process
 let myChromosome: Chromosome | null = null; 
 
+// TODO: for DEBUG only - remove next line ...
+                                        myChromosome =  new Chromosome( 17.04, -49.77, 48.15, -14.78, 20.68, 21.92, -28.07, -30.14, -8.41 );
+
 let LEARN_IN_PROGRESS: boolean = false;
 let HALT_LEARNING: boolean = false;
 let PLAY_TIME_MS: number = 50;
@@ -58,7 +61,7 @@ const PLAY_INFO = {
         }
       }
 
-      resultSet.summerize9SetValue();
+      resultSet.summerize9SetValue( 45 );
       return resultSet;
     },
     // row integrity
@@ -82,7 +85,7 @@ const PLAY_INFO = {
         }
       }
 
-      resultSet.summerize9SetValue();
+      resultSet.summerize9SetValue( 45 );
       return resultSet;
     },
     // 9 sets integrity
@@ -94,18 +97,13 @@ const PLAY_INFO = {
       const resultSet = new DivState();
 
       for ( let index = 0; index < GAME_INFO.BOARD_SIZE_BLOCK; index++ ) {
-        const traverseMap = Array( GAME_INFO.BOARD_SIZE_BLOCK ).fill( false ) as ARRAY_9_BOOL; // reset block traverse state
         const blockSetStates = PLAY_INFO.utils.getBlockSetStates( index, boardState );
-        const blockSetOffset = new Cordinate(
-          index % GAME_INFO.BOARD_BLOCK_SET_WIDTH,
-          Math.floor( index / GAME_INFO.BOARD_BLOCK_SET_WIDTH )
-        );
-        for ( let j = 0; j < GAME_INFO.BOARD_BLOCK_SET_WIDTH; j++ ) {
-          for ( let i = 0; i < GAME_INFO.BOARD_BLOCK_SET_WIDTH; i++ ) {
+        for ( let row = 0; row < GAME_INFO.BOARD_BLOCK_SET_WIDTH; row++ ) {
+          for ( let col = 0; col < GAME_INFO.BOARD_BLOCK_SET_WIDTH; col++ ) {
+            const traverseMap = Array( GAME_INFO.BOARD_SIZE_BLOCK ).fill( false ) as ARRAY_9_BOOL; // reset block traverse state
             const gapSize = getMatrixGapCount(
-              blockSetOffset,
-              j,
-              i,
+              row,
+              col,
               traverseMap,
               blockSetStates
             );
@@ -115,7 +113,7 @@ const PLAY_INFO = {
         }
       }
 
-      resultSet.summerize9SetValue();
+      resultSet.summerize9SetValue( 81 );
       return resultSet;
     },
     // occupation percentage
@@ -131,7 +129,6 @@ const PLAY_INFO = {
       } );
 
       result /= Math.pow( GAME_INFO.BOARD_SIZE_BLOCK, 2 ); // normalise the value according to the worst case value ( 9 * 9 )
-      result = Math.round( result * 100 ) / 100; // 2 decimal precision
 
       return result;
     },
@@ -164,8 +161,7 @@ const PLAY_INFO = {
           : 0;
       }
 
-      result /= 3 * GAME_INFO.BOARD_SIZE_BLOCK; // normalise the value according to the best case value ( 9 * 9 )
-      result = Math.round( result * 100 ) / 100; // 2 decimal precision
+      result /= 3 * GAME_INFO.BOARD_SIZE_BLOCK; // normalise the value according to the best case value ( 3 * 9 )
 
       return result;
     },
@@ -176,60 +172,32 @@ const PLAY_INFO = {
       }
 
       const resultSet = new BoardIntegrityResult();
-      const traverseMap: boolean[] = Array( GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK ).fill( false );
-
-
-      const getMatrixGapCount = ( offset: Cordinate ): number => {
-        let gapCount = 0;
-        let cellIndex = offset.y * GAME_INFO.BOARD_SIZE_BLOCK + offset.x;
-
-        if (
-          offset.y < GAME_INFO.BOARD_SIZE_BLOCK &&
-          offset.x < GAME_INFO.BOARD_SIZE_BLOCK &&
-          !traverseMap[cellIndex] &&
-          boardState[cellIndex]
-        ) {
-          traverseMap[cellIndex] = true;
-
-          gapCount =
-            1 + // add current cell state
-            getMatrixGapCount( new Cordinate( offset.x + 1, offset.y ) ) +
-            getMatrixGapCount( new Cordinate( offset.x, offset.y + 1 ) ) +
-            getMatrixGapCount( new Cordinate( offset.x + 1, offset.y + 1 ) ); // TODO: oriental should be considered later
-        }
-
-        return gapCount;
-      };
-
       for (
         let index = 0;
         index < GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK;
         index++
       ) {
-        const gapSize = getMatrixGapCount(
-          new Cordinate(
-            index % GAME_INFO.BOARD_SIZE_BLOCK,
-            Math.floor( index / GAME_INFO.BOARD_SIZE_BLOCK ),
-          )
+        const traverseMap = Array( GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK ).fill( false ) as BOARD_STATE; // reset block traverse state
+        const gapSize = getMatrixGapCountFull(
+          index % GAME_INFO.BOARD_SIZE_BLOCK,
+          Math.floor( index / GAME_INFO.BOARD_SIZE_BLOCK ),
+          traverseMap,
+          boardState
         );
-        if ( gapSize ) {
-          resultSet.divCount[ gapSize ]++;
-        }
+
+        resultSet.addCount( index, gapSize );
       }
 
       for ( let index = 0; index < resultSet.divCount.length; index++ ) {
-        resultSet.divValue +=
-          ( GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK - index ) *
-            resultSet.divCount[ index ];
+        resultSet.divValue += resultSet.divCount[ index ];
       }
 
       resultSet.divValue /=
-        GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK * 45; // normalise the value according to the worst case value ( 81 * 45 )
-      resultSet.divValue = Math.round( resultSet.divValue * 100 ) / 100; // 2 decimal precision
+        GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK * 81; // normalise the value according to the worst case value ( 81 * 81 )
 
       return resultSet;
     },
-    // total board integrity
+    // side of the board occupation
     getP: ( boardState: BOARD_STATE | undefined ): number => {
       if ( boardState === undefined ) {
         boardState = PLAY_INFO.boardState;
@@ -237,19 +205,18 @@ const PLAY_INFO = {
 
       let result = .0;
 
-      for ( let i = 0; i < GAME_INFO.BOARD_SIZE_BLOCK; i++ ) {
-        for ( let j =  0; j < GAME_INFO.BOARD_SIZE_BLOCK; j++ ) {
+      for ( let col = 0; col < GAME_INFO.BOARD_SIZE_BLOCK; col++ ) {
+        for ( let row =  0; row < GAME_INFO.BOARD_SIZE_BLOCK; row++ ) {
           result += 
             ( 
-              Math.abs( i - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) ) +
-              Math.abs( j - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) )
-            ) * ( boardState[ i * GAME_INFO.BOARD_SIZE_BLOCK + j ] ? 1 : 0 )
+              Math.abs( col - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) ) +
+              Math.abs( row - Math.floor( GAME_INFO.BOARD_SIZE_BLOCK / 2 ) )
+            ) * ( boardState[ row * GAME_INFO.BOARD_SIZE_BLOCK + col ] ? 1 : 0 )
         }
       }
 
       // normalise the number
-      result /= ( GAME_INFO.BOARD_SIZE_BLOCK - 1 ) * boardState.length;
-      result = Math.round( result * 100 ) / 100; // 2 decimal precision
+      result /= ( GAME_INFO.BOARD_SIZE_BLOCK * .5 ) * boardState.length;
 
       return result;
     }
@@ -303,7 +270,7 @@ const PLAY_INFO = {
 
       return resultSet;
     },
-    getColSetStates: (col: number, boardState: BOARD_STATE | undefined ): boolean[][] => {
+    getColSetStates: ( col: number, boardState: BOARD_STATE | undefined ): boolean[][] => {
       if ( boardState === undefined ) {
         boardState = PLAY_INFO.boardState;
       }
@@ -323,27 +290,56 @@ const PLAY_INFO = {
 };
 
 function getMatrixGapCount(
-  blockSetOffset: Cordinate,
   row: number,
   col: number,
-  traverseMap: ARRAY_9_BOOL,
+  traverseMap: boolean[],
   blockSetStates: boolean[][]
 ) {
   let gapCount = 0;
 
+  const max = Math.sqrt( traverseMap.length );
   if (
-    row + blockSetOffset.y < GAME_INFO.BOARD_BLOCK_SET_WIDTH &&
-    col + blockSetOffset.x < GAME_INFO.BOARD_BLOCK_SET_WIDTH &&
-    !traverseMap[ row * GAME_INFO.BOARD_BLOCK_SET_WIDTH + col ] &&
-    !blockSetStates[ row + blockSetOffset.y ][ col + blockSetOffset.x ]
+    row < max && row > -1 &&
+    col < max && col > -1 &&
+    !traverseMap[ row * max + col ] &&
+    !blockSetStates[ row ][ col ]
   ) {
-    traverseMap[ row * GAME_INFO.BOARD_BLOCK_SET_WIDTH + col ] = true;
+    traverseMap[ row * max + col ] = true;
 
     gapCount =
       1 +
-      getMatrixGapCount( blockSetOffset, row + 1, col, traverseMap, blockSetStates ) +
-      getMatrixGapCount( blockSetOffset, row, col + 1, traverseMap, blockSetStates );
-    //+ getMatrixGapCount( blockSetOffset, row + 1  , col + 1 );        TODO: diagonal should be considered later
+      getMatrixGapCount( row + 1, col, traverseMap, blockSetStates ) +
+      getMatrixGapCount( row, col + 1, traverseMap, blockSetStates ) +
+      getMatrixGapCount( row - 1, col, traverseMap, blockSetStates ) +
+      getMatrixGapCount( row, col - 1, traverseMap, blockSetStates )
+  }
+
+  return gapCount;
+};
+
+function getMatrixGapCountFull(
+  row: number,
+  col: number,
+  traverseMap: boolean[],
+  boardState: boolean[]
+) {
+  let gapCount = 0;
+
+  const max = Math.sqrt( traverseMap.length );
+  if (
+    row < max && row > -1 &&
+    col < max && col > -1 &&
+    !traverseMap[ row * max + col ] &&
+    !boardState[ row * max + col ]
+  ) {
+    traverseMap[ row * max + col ] = true;
+
+    gapCount =
+      1 +
+      getMatrixGapCountFull( row + 1, col, traverseMap, boardState ) +
+      getMatrixGapCountFull( row, col + 1, traverseMap, boardState ) +
+      getMatrixGapCountFull( row - 1, col, traverseMap, boardState ) +
+      getMatrixGapCountFull( row, col - 1, traverseMap, boardState )
   }
 
   return gapCount;
@@ -380,7 +376,7 @@ function isPossibleToDrawOnStage( element: ELEMENT, offsetStagePoint: Cordinate,
 function drawElementOnStage( element: ELEMENT, offsetStagePoint: Cordinate, additionalClass: string ): CellChangeEffect {
   const changeResult = new CellChangeEffect();
 
-  debugger;
+  //debugger;
 
   if ( isPossibleToDrawOnStage( element, offsetStagePoint ) ) {
     for ( let i = 0; i < ELEMENT_PATTERN_SIZE; i++ ) {

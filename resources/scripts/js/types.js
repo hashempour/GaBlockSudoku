@@ -93,13 +93,11 @@ class DivState {
         }
         this.divCount[index] += count;
     }
-    summerize9SetValue() {
-        var _a;
+    summerize9SetValue(maxCellValue) {
         for (let index = 0; index < this.divCount.length; index++) {
-            this.divValue += (10 - index) * ((_a = this.divCount[index]) !== null && _a !== void 0 ? _a : 0);
+            this.divValue += this.divCount[index];
         }
-        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * 45; // normalise the value according to the worst case value ( 9 * 45 )
-        this.divValue = Math.round(this.divValue * 100) / 100; // 2 decimal precision
+        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * maxCellValue; // normalise the value according to the worst case value (e.g. 9 * 45 )
     }
 }
 class CellChangeEffect {
@@ -139,6 +137,12 @@ class BoardIntegrityResult {
     constructor() {
         this.divCount = new Array(81).fill(0);
         this.divValue = 0;
+    }
+    addCount(index, count) {
+        if (index >= this.divCount.length) {
+            throw new InvalidStateError("index out of bound! " + index + " > " + this.divCount.length);
+        }
+        this.divCount[index] += count;
     }
 }
 var VISUALISATION_STATE;
