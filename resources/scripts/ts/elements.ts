@@ -599,7 +599,7 @@ function getThreeRandomElements(): ELEMENT[] {
     ] as ELEMENT[];
 }
 
-function getOccupationOfElement ( element: ELEMENT ): number {
-    // normalise the occupation value to 2 decimal precision according to the max occupation value
-    return Math.round( element.OCCUPATION / ELEMENT_MAX_OCCUPATION * 100 ) / 100;
+function getOccupationOfElement( element: ELEMENT ): number {
+    // normalise the occupation value according to the max occupation value
+    return element.OCCUPATION / ELEMENT_MAX_OCCUPATION;
 }

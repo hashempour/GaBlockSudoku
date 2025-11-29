@@ -257,14 +257,15 @@ function isPossibleToDrawOnStage(element, offsetStagePoint, boardState = undefin
     for (let i = 0; i < ELEMENT_PATTERN_SIZE; i++) {
         for (let j = 0; j < ELEMENT_PATTERN_SIZE; j++) {
             if (element.PATTERN[j * ELEMENT_PATTERN_SIZE + i]) {
-                const boardStateIndex = (offsetStagePoint.y + j) * GAME_INFO.BOARD_SIZE_BLOCK +
-                    (offsetStagePoint.x + i);
-                if (offsetStagePoint.y + j < 0 ||
-                    offsetStagePoint.y + j >= GAME_INFO.BOARD_SIZE_BLOCK ||
-                    offsetStagePoint.x + i < 0 ||
-                    offsetStagePoint.x + i >= GAME_INFO.BOARD_SIZE_BLOCK ||
+                const col = offsetStagePoint.x + i;
+                const row = offsetStagePoint.y + j;
+                const boardStateIndex = row * GAME_INFO.BOARD_SIZE_BLOCK + col;
+                if (row < 0 ||
+                    row >= GAME_INFO.BOARD_SIZE_BLOCK ||
+                    col < 0 ||
+                    col >= GAME_INFO.BOARD_SIZE_BLOCK ||
                     boardState[boardStateIndex]) {
-                    // block OCCUPIED or OUT OF RANGE
+                    // cell OCCUPIED or OUT OF RANGE
                     return false;
                 }
             }
@@ -274,7 +275,6 @@ function isPossibleToDrawOnStage(element, offsetStagePoint, boardState = undefin
 }
 function drawElementOnStage(element, offsetStagePoint, additionalClass) {
     const changeResult = new CellChangeEffect();
-    //debugger;
     if (isPossibleToDrawOnStage(element, offsetStagePoint)) {
         for (let i = 0; i < ELEMENT_PATTERN_SIZE; i++) {
             for (let j = 0; j < ELEMENT_PATTERN_SIZE; j++) {
@@ -389,7 +389,6 @@ function isAllCellsOccupied(cells) {
     }
     for (let rowIndex = 0; rowIndex < cells.length; rowIndex++) {
         if (cells[rowIndex] === undefined) {
-            debugger;
             throw new InvalidStateError("Cell row is undefined! " + rowIndex);
         }
         for (let cellIndex = 0; cellIndex < cells[rowIndex].length; cellIndex++) {
@@ -420,7 +419,6 @@ function cleanUp(cleanupSet, boardState = undefined, isSimulate = false) {
     });
     // col
     cleanupSet.colIndexes.forEach((index) => {
-        //console.debug( index );
         cleanupColSet(index, boardState, isSimulate);
         if (!isSimulate) {
             addScore(GAME_INFO.BOARD_SIZE_BLOCK * 2); // 9 * 2 -> Col count

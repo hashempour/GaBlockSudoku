@@ -593,7 +593,7 @@ function getThreeRandomElements() {
     ];
 }
 function getOccupationOfElement(element) {
-    // normalise the occupation value to 2 decimal precision according to the max occupation value
-    return Math.round(element.OCCUPATION / ELEMENT_MAX_OCCUPATION * 100) / 100;
+    // normalise the occupation value according to the max occupation value
+    return element.OCCUPATION / ELEMENT_MAX_OCCUPATION;
 }
 //# sourceMappingURL=elements.js.map

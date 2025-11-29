@@ -96,7 +96,7 @@ const GENETICS = {
   currentPopulation: -1,
   POPULATION_COUNT: 25,
   CHROMOSOME_DNA_COUNT: 9,
-  CHROMOSOME_DNA_RANGE: 10100, // -50.50 .. 0.00 .. +50.50
+  CHROMOSOME_DNA_RANGE: 10, // -5.0 .. 0.00 .. +5.0
 
   MUTATION_RATE: 0.4,
   REBORN_GEN_DATA: {
@@ -109,11 +109,9 @@ const GENETICS = {
 
   utils: {
     getRandDNA: () => {
-      // -100.00 .. 0.00 .. +100.00
-      return (
-        ( Math.floor( Math.random() * GENETICS.CHROMOSOME_DNA_RANGE ) -
-          Math.floor( GENETICS.CHROMOSOME_DNA_RANGE / 2 ) ) / 100
-      );
+      // -5.0 .. 0.00 .. +5.0
+      return ( Math.random() * GENETICS.CHROMOSOME_DNA_RANGE ) 
+        - (GENETICS.CHROMOSOME_DNA_RANGE / 2 );
     },
     createPopulation: () => {
       for ( let i = 0; i < GENETICS.POPULATION_COUNT; i++ ) {
@@ -453,20 +451,18 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
     // 3! = 6 ; all possible place orders for 3 elements
     // TODO: GENERALISE the pickup solution for any element count! recursive mode.
     // it is hard-coded only for 3 elements!
-    let firstElementIndex = Math.floor( index / 2 );
-    let secondElementIndex =
+    const firstElementIndex = Math.floor( index / 2 );
+    const secondElementIndex =
       ( firstElementIndex + ( index % 2 ? 1 : 2 ) ) % elements.length;
-    let thirdElementIndex =
+    const thirdElementIndex =
       ( firstElementIndex + ( index % 2 ? 2 : 1 ) ) % elements.length;
-    let pickupElementOrder = [
+    const pickupElementOrder = [
       elements[ firstElementIndex ],
       elements[ secondElementIndex ],
       elements[ thirdElementIndex ],
     ] as ELEMENT[];
 
     // try to simulate the chosen order
-
-    const MAX = GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2;
 
     // make a copy of current board state for calculation score simulation
     const boardStateSimulation = getCopyOfBoardState();
@@ -491,8 +487,8 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
       // pick the elements up in the assumed order
       const element = pickupElementOrder[ elementIndex ];
 
-      for ( let i = ELEMENT_PATTERN_SIZE * -1; i < MAX; i++ ) {
-        for ( let j = ELEMENT_PATTERN_SIZE * -1; j < MAX; j++ ) {
+      for ( let i = ELEMENT_PATTERN_SIZE * -1; i < GAME_INFO.BOARD_SIZE_BLOCK; i++ ) {
+        for ( let j = ELEMENT_PATTERN_SIZE * -1; j < GAME_INFO.BOARD_SIZE_BLOCK; j++ ) {
           if (
             isPossibleToDrawOnStage(
               element,
@@ -517,7 +513,9 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
                 chromosome,
                 boardStateSimulation
               );
+              throw new InvalidStateError( "Calculated value is NaN!!" );
             }
+
             if ( bestPractice.value === null || bestPractice.value > calcValue ) {
               // found better element-performance
               bestPractice.value = calcValue;
@@ -538,7 +536,6 @@ function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
           throw new InvalidStateError( "BestPractice element cannot be null!" );
         }
 
-        //drawElementOnStage( bestPractice.element, bestPractice.position, 'fresh' );
         simulateBoardState(
           bestPractice.element,
           bestPractice.position,
