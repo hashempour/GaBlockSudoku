@@ -36,7 +36,6 @@ const PLAY_INFO = {
     statistics: {
         // column integrity
         getX: function (boardState) {
-            // TODO: old algorithm had better efficieny
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -59,7 +58,6 @@ const PLAY_INFO = {
         },
         // row integrity
         getY: function (boardState) {
-            // TODO: old algorithm had better efficieny
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
