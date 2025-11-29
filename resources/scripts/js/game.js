@@ -36,6 +36,7 @@ const PLAY_INFO = {
     statistics: {
         // column integrity
         getX: function (boardState) {
+            // TODO: old algorithm had better efficieny
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -58,6 +59,7 @@ const PLAY_INFO = {
         },
         // row integrity
         getY: function (boardState) {
+            // TODO: old algorithm had better efficieny
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
@@ -361,23 +363,18 @@ function checkForCleanup(boardState = undefined, isSimulate = false) {
     }
     const cleanupSet = new CleanupSet();
     // FIND TO CLEAN-UP
-    // find block sets to cleanup
-    for (let blockIndex = 0; blockIndex < GAME_INFO.BOARD_SIZE_BLOCK; blockIndex++) {
-        if (isAllCellsOccupied(PLAY_INFO.utils.getBlockSetStates(blockIndex, boardState))) {
-            cleanupSet.blockIndexes.push(blockIndex);
+    for (let index = 0; index < GAME_INFO.BOARD_SIZE_BLOCK; index++) {
+        // find block sets to cleanup
+        if (isAllCellsOccupied(PLAY_INFO.utils.getBlockSetStates(index, boardState))) {
+            cleanupSet.blockIndexes.push(index);
         }
-    }
-    // find rows to cleanup
-    for (let rowIndex = 0; rowIndex < GAME_INFO.BOARD_BLOCK_SET_WIDTH; rowIndex++) {
-        if (isAllCellsOccupied(PLAY_INFO.utils.getRowSetStates(rowIndex, boardState))) {
-            cleanupSet.rowIndexes.push(rowIndex);
+        // find rows to cleanup
+        if (isAllCellsOccupied(PLAY_INFO.utils.getRowSetStates(index, boardState))) {
+            cleanupSet.rowIndexes.push(index);
         }
-    }
-    //console.debug( 'as', affectionState);
-    // find cols to cleanup
-    for (let colIndex = 0; colIndex < GAME_INFO.BOARD_BLOCK_SET_WIDTH; colIndex++) {
-        if (isAllCellsOccupied(PLAY_INFO.utils.getColSetStates(colIndex, boardState))) {
-            cleanupSet.colIndexes.push(colIndex);
+        // find cols to cleanup
+        if (isAllCellsOccupied(PLAY_INFO.utils.getColSetStates(index, boardState))) {
+            cleanupSet.colIndexes.push(index);
         }
     }
     // CLEAN-UP
