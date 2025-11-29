@@ -94,7 +94,7 @@ const GENETICS = {
     currentPopulation: -1,
     POPULATION_COUNT: 25,
     CHROMOSOME_DNA_COUNT: 9,
-    CHROMOSOME_DNA_RANGE: 10, // -5.0 .. 0.00 .. +5.0
+    CHROMOSOME_DNA_RANGE: 50, // -25.0 .. 0.00 .. +25.0
     MUTATION_RATE: 0.4,
     REBORN_GEN_DATA: {
         GEN_LIMIT: 15,
@@ -104,7 +104,7 @@ const GENETICS = {
     genNum: 0,
     utils: {
         getRandDNA: () => {
-            // -5.0 .. 0.00 .. +5.0
+            // -25.0 .. 0.00 .. +25.0
             return (Math.random() * GENETICS.CHROMOSOME_DNA_RANGE)
                 - (GENETICS.CHROMOSOME_DNA_RANGE / 2);
         },
