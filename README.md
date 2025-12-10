@@ -132,5 +132,10 @@ Since all the data is on the client side, you could easy watch the algorithm and
   The myChromosome DNA data will be automatically defined by the best Chromosome DNA data at the end of each learning generation.
   Also you can find/ copy the best Chromosome (DNAs) data from GENETICS.populationGameScore after a learning process and choosing the one according to GENETICS.populationAvgSuccessRates  
 
-
 ## FOR IMPLEMENTATION TECHNICAL HINTS... watch the implemented code either on GitHub or by VIEW-SROUCE-CODE from browser!
+
+## If you want to change the code on your local copy, change the TS first, run Typescript Watch command to get the final js.
+  ```shell
+  tsc --watch
+  ```
+
