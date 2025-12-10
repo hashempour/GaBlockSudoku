@@ -82,22 +82,25 @@ class Cordinate {
         this.y = y;
     }
 }
-class DivState {
+class DivIntegrityResult {
     constructor() {
-        this.divCount = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-        this.divValue = 0;
+        this.gapCount = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
     addCount(index, count) {
-        if (index >= this.divCount.length) {
-            throw new InvalidStateError("index out of bound! " + index + " > " + this.divCount.length);
+        if (index >= this.gapCount.length) {
+            throw new InvalidStateError("index out of bound! " + index + " > " + this.gapCount.length);
         }
-        this.divCount[index] += count;
+        this.gapCount[index] += count;
     }
-    summerize9SetValue(maxCellValue) {
-        for (let index = 0; index < this.divCount.length; index++) {
-            this.divValue += this.divCount[index];
+    increment(index) {
+        this.addCount(index, 1);
+    }
+    getIntegrityValue(maxCellValue) {
+        let sum = 0;
+        for (let index = 0; index < this.gapCount.length; index++) {
+            sum += (10 - index) * this.gapCount[index];
         }
-        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * maxCellValue; // normalise the value according to the worst case value (e.g. 9 * 45 )
+        return sum / (this.gapCount.length * maxCellValue); // normalise the value according to the worst case value (e.g. 9 * 45 )
     }
 }
 class CellChangeEffect {
@@ -135,14 +138,23 @@ class TotalSuccessRate {
 }
 class BoardIntegrityResult {
     constructor() {
-        this.divCount = new Array(81).fill(0);
-        this.divValue = 0;
+        this.gapCount = new Array(81).fill(0);
     }
     addCount(index, count) {
-        if (index >= this.divCount.length) {
-            throw new InvalidStateError("index out of bound! " + index + " > " + this.divCount.length);
+        if (index >= this.gapCount.length) {
+            throw new InvalidStateError("index out of bound! " + index + " > " + this.gapCount.length);
         }
-        this.divCount[index] += count;
+        this.gapCount[index] += count;
+    }
+    increment(index) {
+        this.addCount(index, 1);
+    }
+    getIntegrityValue(maxCellValue) {
+        let sum = 0;
+        for (let index = 0; index < this.gapCount.length; index++) {
+            sum += this.gapCount[index];
+        }
+        return sum / (this.gapCount.length * maxCellValue); // normalise the value according to the worst case value ( 81 * 81 )
     }
 }
 var VISUALISATION_STATE;

@@ -130,29 +130,32 @@ class Cordinate {
     }
 }
 
-class DivState {
-    divCount: ARRAY_9_NUM;
-    divValue: number;
+class DivIntegrityResult {
+    gapCount: ARRAY_9_NUM;
 
     constructor() {
-        this.divCount = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
-        this.divValue = 0;
+        this.gapCount = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
     }
 
     addCount( index: number, count: number ): void {
-        if ( index >= this.divCount.length ) {
-            throw new InvalidStateError( "index out of bound! " + index + " > " + this.divCount.length );
+        if ( index >= this.gapCount.length ) {
+            throw new InvalidStateError( "index out of bound! " + index + " > " + this.gapCount.length );
         }
 
-        this.divCount[ index ] += count;
+        this.gapCount[ index ] += count;
     }
 
-    summerize9SetValue( maxCellValue: number ): void {
-        for ( let index = 0; index < this.divCount.length; index++ ) {
-            this.divValue += this.divCount[ index ];
+    increment( index: number ): void {
+        this.addCount( index, 1 );
+    }
+
+    getIntegrityValue( maxCellValue: number ): number {
+        let sum = 0;
+        for ( let index = 0; index < this.gapCount.length; index++ ) {
+            sum += ( 10 - index ) * this.gapCount[ index ];
         }
 
-        this.divValue /= GAME_INFO.BOARD_SIZE_BLOCK * maxCellValue; // normalise the value according to the worst case value (e.g. 9 * 45 )
+        return sum / ( this.gapCount.length * maxCellValue ); // normalise the value according to the worst case value (e.g. 9 * 45 )
     }
 }
 
@@ -211,20 +214,31 @@ class TotalSuccessRate {
 }
 
 class BoardIntegrityResult {
-    divCount: number[]; // [ 0 .. 80 ]; to be initialised
-    divValue: number;
+    gapCount: number[]; // [ 0 .. 80 ]; to be initialised
 
     constructor() {
-        this.divCount = new Array( 81 ).fill( 0 );
-        this.divValue = 0;
+        this.gapCount = new Array( 81 ).fill( 0 );
     }
 
     addCount( index: number, count: number ): void {
-        if ( index >= this.divCount.length ) {
-            throw new InvalidStateError( "index out of bound! " + index + " > " + this.divCount.length );
+        if ( index >= this.gapCount.length ) {
+            throw new InvalidStateError( "index out of bound! " + index + " > " + this.gapCount.length );
         }
 
-        this.divCount[ index ] += count;
+        this.gapCount[ index ] += count;
+    }
+
+    increment( index: number ): void {
+        this.addCount( index, 1 );
+    }
+
+    getIntegrityValue( maxCellValue: number ): number {
+        let sum = 0;
+        for ( let index = 0; index < this.gapCount.length; index++ ) {
+            sum += this.gapCount[ index ];
+        }
+
+        return sum / ( this.gapCount.length * maxCellValue ); // normalise the value according to the worst case value ( 81 * 81 )
     }
 }
 

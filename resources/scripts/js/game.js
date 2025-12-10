@@ -35,67 +35,76 @@ const PLAY_INFO = {
     // P: side of the board occupation
     statistics: {
         // column integrity
-        getX: function (boardState) {
+        getX: (boardState) => {
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
-            const resultSet = new DivState();
-            for (let col = 0; col < GAME_INFO.BOARD_SIZE_BLOCK; col++) {
-                let gapSize = 0;
-                for (let row = 0; row < GAME_INFO.BOARD_SIZE_BLOCK; row++) {
-                    const cellState = boardState[row * GAME_INFO.BOARD_SIZE_BLOCK + col];
-                    if (cellState) { // occupied cell
-                        gapSize = 0; // reset gap size
-                    }
-                    else {
-                        gapSize++;
-                        resultSet.addCount(col, gapSize); // add up each gap-count to the column
-                    }
-                }
-            }
-            resultSet.summerize9SetValue(45);
-            return resultSet;
-        },
-        // row integrity
-        getY: function (boardState) {
-            if (boardState === undefined) {
-                boardState = PLAY_INFO.boardState;
-            }
-            const resultSet = new DivState();
+            const resultSet = new DivIntegrityResult();
             for (let row = 0; row < GAME_INFO.BOARD_SIZE_BLOCK; row++) {
                 let gapSize = 0;
                 for (let col = 0; col < GAME_INFO.BOARD_SIZE_BLOCK; col++) {
                     const cellState = boardState[row * GAME_INFO.BOARD_SIZE_BLOCK + col];
                     if (cellState) { // occupied cell
-                        gapSize = 0; // reset gap size
+                        if (gapSize > 0) {
+                            resultSet.increment(gapSize - 1); // add +1 to the count for the Gap-Size
+                            gapSize = 0; // reset gap size
+                        }
                     }
                     else {
                         gapSize++;
-                        resultSet.addCount(row, gapSize); // add up each gap-count to the row
                     }
                 }
+                if (gapSize > 0) {
+                    resultSet.increment(gapSize - 1); // add +1 to the count for the last Gap-Size
+                }
             }
-            resultSet.summerize9SetValue(45);
-            return resultSet;
+            return resultSet.getIntegrityValue(45);
+        },
+        // row integrity
+        getY: (boardState) => {
+            if (boardState === undefined) {
+                boardState = PLAY_INFO.boardState;
+            }
+            const resultSet = new DivIntegrityResult();
+            for (let row = 0; row < GAME_INFO.BOARD_SIZE_BLOCK; row++) {
+                let gapSize = 0;
+                for (let col = 0; col < GAME_INFO.BOARD_SIZE_BLOCK; col++) {
+                    const cellState = boardState[row * GAME_INFO.BOARD_SIZE_BLOCK + col];
+                    if (cellState) { // occupied cell
+                        if (gapSize > 0) {
+                            resultSet.increment(gapSize - 1); // add +1 to the count for the Gap-Size
+                            gapSize = 0; // reset gap size
+                        }
+                    }
+                    else {
+                        gapSize++;
+                    }
+                }
+                if (gapSize > 0) {
+                    resultSet.increment(gapSize - 1); // add +1 to the count for the last Gap-Size
+                }
+            }
+            return resultSet.getIntegrityValue(45);
         },
         // 9 sets integrity
         getZ: (boardState) => {
             if (boardState === undefined) {
                 boardState = PLAY_INFO.boardState;
             }
-            const resultSet = new DivState();
+            const resultSet = new DivIntegrityResult();
             for (let index = 0; index < GAME_INFO.BOARD_SIZE_BLOCK; index++) {
                 const blockSetStates = PLAY_INFO.utils.getBlockSetStates(index, boardState);
                 for (let row = 0; row < GAME_INFO.BOARD_BLOCK_SET_WIDTH; row++) {
                     for (let col = 0; col < GAME_INFO.BOARD_BLOCK_SET_WIDTH; col++) {
                         const traverseMap = Array(GAME_INFO.BOARD_SIZE_BLOCK).fill(false); // reset block traverse state
                         const gapSize = getMatrixGapCount(row, col, traverseMap, blockSetStates);
-                        resultSet.addCount(index, gapSize);
+                        if (gapSize > 0) {
+                            resultSet.increment(gapSize - 1);
+                        }
                     }
                 }
             }
-            resultSet.summerize9SetValue(81);
-            return resultSet;
+            return resultSet.getIntegrityValue(81);
         },
         // occupation percentage
         getW: (boardState) => {
@@ -141,14 +150,11 @@ const PLAY_INFO = {
             for (let index = 0; index < GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK; index++) {
                 const traverseMap = Array(GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK).fill(false); // reset block traverse state
                 const gapSize = getMatrixGapCountFull(index % GAME_INFO.BOARD_SIZE_BLOCK, Math.floor(index / GAME_INFO.BOARD_SIZE_BLOCK), traverseMap, boardState);
-                resultSet.addCount(index, gapSize);
+                if (gapSize > 0) {
+                    resultSet.increment(gapSize - 1);
+                }
             }
-            for (let index = 0; index < resultSet.divCount.length; index++) {
-                resultSet.divValue += resultSet.divCount[index];
-            }
-            resultSet.divValue /=
-                GAME_INFO.BOARD_SIZE_BLOCK * GAME_INFO.BOARD_SIZE_BLOCK * 81; // normalise the value according to the worst case value ( 81 * 81 )
-            return resultSet;
+            return resultSet.getIntegrityValue(81);
         },
         // side of the board occupation
         getP: (boardState) => {
@@ -326,10 +332,6 @@ function updateScore() {
     if (VISUALISE !== VISUALISATION_STATE.NONE) {
         $("#labelScore").text(PLAY_INFO.score);
         $("#labelHighScore").text(PLAY_INFO.hiScore);
-        //$('#labelX').text(PLAY_INFO.statistics.getX().divValue);
-        //$('#labelY').text(PLAY_INFO.statistics.getY().divValue);
-        //$('#labelZ').text(PLAY_INFO.statistics.getZ().divValue);
-        //$('#labelW').text(PLAY_INFO.statistics.getW());
     }
 }
 function putRandom() {

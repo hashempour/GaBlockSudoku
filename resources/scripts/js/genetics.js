@@ -479,14 +479,14 @@ function getCalculatedValue(element, position, chromosome, boardState) {
     const boardStateSimulation = getCopyOfBoardState(boardState);
     simulateBoardState(element, position, boardStateSimulation); // update board state
     // simulate
-    return (chromosome.a * PLAY_INFO.statistics.getX(boardStateSimulation).divValue +
-        chromosome.b * PLAY_INFO.statistics.getY(boardStateSimulation).divValue +
-        chromosome.c * PLAY_INFO.statistics.getZ(boardStateSimulation).divValue +
+    return (chromosome.a * PLAY_INFO.statistics.getX(boardStateSimulation) +
+        chromosome.b * PLAY_INFO.statistics.getY(boardStateSimulation) +
+        chromosome.c * PLAY_INFO.statistics.getZ(boardStateSimulation) +
         chromosome.d * PLAY_INFO.statistics.getW(boardStateSimulation) +
         chromosome.e * getOccupationOfElement(element) +
         chromosome.f +
         chromosome.g * PLAY_INFO.statistics.getT(boardStateSimulation) +
-        chromosome.h * PLAY_INFO.statistics.getS(boardStateSimulation).divValue +
+        chromosome.h * PLAY_INFO.statistics.getS(boardStateSimulation) +
         chromosome.i * PLAY_INFO.statistics.getP(boardStateSimulation));
 }
 function simulateBoardState(element, position, boardState) {
