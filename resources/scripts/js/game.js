@@ -4,8 +4,6 @@ let DRAW_ALL_ELEMENTS = true;
 let DEBUG_MODE = DEBUGMODE_STATE.NONE;
 // it will be defined either by user or during the learning process
 let myChromosome = null;
-// TODO: for DEBUG only - remove next line ...
-myChromosome = new Chromosome(17.04, -49.77, 48.15, -14.78, 20.68, 21.92, -28.07, -30.14, -8.41);
 let LEARN_IN_PROGRESS = false;
 let HALT_LEARNING = false;
 let PLAY_TIME_MS = 50;
@@ -565,7 +563,7 @@ function stageBlock_Click() {
 function buttonPlayARound_Click() {
     if (myChromosome === null) {
         $("#defineChromosomePanel.modal").addClass("shown");
-        let msg = "Either define myChromosome DNA or LEARN the game for a while to set it automatically!\nmyChromosome = { a: #, b: #, c: #, d: #, e: #, f: #, g: #, h: # }; // # is DNA float number\n* The more generation game learns, the better chromosome you have for play!";
+        let msg = "Either define myChromosome DNA or LEARN the game for a while, then it will be set automatically!\nmyChromosome = new Chromosome( #, #, #, #, #, #, #, #, # ); // # is DNA float number\n* The more generation the game learns, the better chromosome you have to play!";
         console.info(msg);
         return;
     }
@@ -628,15 +626,17 @@ function buttonGoForLearn_Click() {
 function buttonSubmitChromosomeData_Click() {
     let isValid = true;
     const chromosomeData = new Chromosome(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    $('#defineChromosomePanel_Body input[type="text"][data-key]').each(() => {
+    $('#defineChromosomePanel_Body input[type="text"][data-key]').each(function () {
+        debugger;
         const value = $(this).val();
-        const isNotNumber = value === null || value.trim().length === 0 || isNaN($(this).val());
+        const isNotNumber = value === null || value.trim().length === 0 || isNaN(value);
         $(this).toggleClass("error", isNotNumber);
         if (isNotNumber) {
+            console.error(`${value} is not a valid!`);
             isValid = false;
         }
         else {
-            chromosomeData.dna.set($(this).attr("data-key"), Number($(this).val()));
+            chromosomeData.dna.set($(this).attr("data-key"), Number(value));
         }
     });
     if (isValid) {
@@ -644,6 +644,9 @@ function buttonSubmitChromosomeData_Click() {
         // draw and choose 3 random elements to play with in the next round
         PLAY_INFO.currentElements = drawNewElements();
         $(this).parents(".modal").removeClass("shown");
+    }
+    else {
+        console.error('Invalid input!');
     }
 }
 //# sourceMappingURL=game.js.map

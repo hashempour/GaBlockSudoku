@@ -5,9 +5,6 @@ let DEBUG_MODE: DEBUGMODE_STATE = DEBUGMODE_STATE.NONE;
 // it will be defined either by user or during the learning process
 let myChromosome: Chromosome | null = null; 
 
-// TODO: for DEBUG only - remove next line ...
-                                        myChromosome =  new Chromosome( 17.04, -49.77, 48.15, -14.78, 20.68, 21.92, -28.07, -30.14, -8.41 );
-
 let LEARN_IN_PROGRESS: boolean = false;
 let HALT_LEARNING: boolean = false;
 let PLAY_TIME_MS: number = 50;
@@ -794,7 +791,7 @@ function buttonPlayARound_Click() {
     $( "#defineChromosomePanel.modal" ).addClass( "shown" );
 
     let msg =
-      "Either define myChromosome DNA or LEARN the game for a while to set it automatically!\nmyChromosome = { a: #, b: #, c: #, d: #, e: #, f: #, g: #, h: # }; // # is DNA float number\n* The more generation game learns, the better chromosome you have for play!";
+      "Either define myChromosome DNA or LEARN the game for a while, then it will be set automatically!\nmyChromosome = new Chromosome( #, #, #, #, #, #, #, #, # ); // # is DNA float number\n* The more generation the game learns, the better chromosome you have to play!";
     console.info(msg);
 
     return;
@@ -870,15 +867,17 @@ function buttonSubmitChromosomeData_Click( this: HTMLButtonElement ) {
   let isValid = true;
   const chromosomeData = new Chromosome( 0, 0, 0, 0, 0, 0, 0, 0, 0 );
   $( '#defineChromosomePanel_Body input[type="text"][data-key]' ).each(
-    () => {
+    function( this: HTMLInputElement ) {
+      debugger;
       const value = $( this ).val();
       const isNotNumber =
-        value === null || value.trim().length === 0 || isNaN( $( this ).val() );
+        value === null || value.trim().length === 0 || isNaN( value );
       $( this ).toggleClass( "error", isNotNumber );
       if ( isNotNumber ) {
+        console.error( `${value} is not a valid!` )
         isValid = false;
       } else {
-        chromosomeData.dna.set( $( this ).attr( "data-key" ) as string, Number( $( this ).val() ) );
+        chromosomeData.dna.set( $( this ).attr( "data-key" ) as string, Number( value ) );
       }
     }
   );
@@ -890,5 +889,7 @@ function buttonSubmitChromosomeData_Click( this: HTMLButtonElement ) {
     PLAY_INFO.currentElements = drawNewElements();
 
     $( this ).parents( ".modal" ).removeClass( "shown" );
+  } else {
+    console.error( 'Invalid input!' );
   }
 }
