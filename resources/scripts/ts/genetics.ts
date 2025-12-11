@@ -1,4 +1,4 @@
-const FACTORIAL_RESULT_SET = [
+const FACTORIAL_RESULT_SET: number[] = [
   1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600,
   6227020800, 87178291200, 1307674368000, 20922789888000, 355687428096000,
   6402373705728000, 121645100408832000, 2432902008176640000,
@@ -77,11 +77,6 @@ const FACTORIAL_RESULT_SET = [
   93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000,
 ];
 
-var PLAY_TIME_MS = 50;
-var DEBUG_MODE = 0; // 0, 1, 2
-
-let HALT_LEARNING = false;
-let LEARN_IN_PROGRESS = false;
 
 const GENETICS = {
   // Formula: aX + bY + cZ + dW + eQ + f + gT + hS + iP  = 0
@@ -94,14 +89,14 @@ const GENETICS = {
   // S: board total integrity (%)
   // P: priority of sides and corner occupation (%)
 
-  population: [], // Array of Chromosomes of { a, b, c, d, e, f, g, h }
-  populationGameScore: [],
-  populationAvgSuccessRates: [], // [ { s: successRate, c: ageCount }, ... ]
-  avgTotalSuccessRate: {}, // { best, worst, count }
+  population: [] as Chromosome[], // Array of Chromosomes of { a, b, c, d, e, f, g, h }
+  populationGameScore: [] as number[],
+  populationAvgSuccessRates: [] as SuccessRate[],
+  avgTotalSuccessRate: new TotalSuccessRate(),
   currentPopulation: -1,
   POPULATION_COUNT: 25,
   CHROMOSOME_DNA_COUNT: 9,
-  CHROMOSOME_DNA_RANGE: 10100, // -50.50 .. 0.00 .. +50.50
+  CHROMOSOME_DNA_RANGE: 50, // -25.0 .. 0.00 .. +25.0
 
   MUTATION_RATE: 0.4,
   REBORN_GEN_DATA: {
@@ -113,115 +108,115 @@ const GENETICS = {
   genNum: 0,
 
   utils: {
-    getRandDNA: function () {
-      // -100.00 .. 0.00 .. +100.00
-      return (
-        (Math.floor(Math.random() * GENETICS.CHROMOSOME_DNA_RANGE) -
-          Math.floor(GENETICS.CHROMOSOME_DNA_RANGE / 2)) / 100
-      );
+    getRandDNA: () => {
+      // -25.0 .. 0.00 .. +25.0
+      return ( Math.random() * GENETICS.CHROMOSOME_DNA_RANGE ) 
+        - ( GENETICS.CHROMOSOME_DNA_RANGE / 2 );
     },
-    createPopulation: function () {
-      for (let i = 0; i < GENETICS.POPULATION_COUNT; i++) {
-        GENETICS.population.push({
-          a: GENETICS.utils.getRandDNA(),
-          b: GENETICS.utils.getRandDNA(),
-          c: GENETICS.utils.getRandDNA(),
-          d: GENETICS.utils.getRandDNA(),
-          e: GENETICS.utils.getRandDNA(),
-          f: GENETICS.utils.getRandDNA(),
-          g: GENETICS.utils.getRandDNA(),
-          h: GENETICS.utils.getRandDNA(),
-          i: GENETICS.utils.getRandDNA(),
-        });
+    createPopulation: () => {
+      for ( let i = 0; i < GENETICS.POPULATION_COUNT; i++ ) {
+        GENETICS.population.push(
+          new Chromosome(
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+            GENETICS.utils.getRandDNA(),
+          )
+        );
 
-        GENETICS.populationGameScore.push(0);
-        GENETICS.populationAvgSuccessRates.push({ s: 0.0, c: 0 }); //  { s: successRate, c: ageCount }
-        GENETICS.avgTotalSuccessRate = { best: 0.0, worst: 0.0, count: 0 };
+        GENETICS.populationGameScore.push( 0 );
+        GENETICS.populationAvgSuccessRates.push( new SuccessRate() );
+        GENETICS.avgTotalSuccessRate = new TotalSuccessRate();
       }
     },
-    buildNextGeneration: function () {
+    buildNextGeneration: () => {
       //console.debug( 'GEN #' + GENETICS.genNum , GENETICS.population );
 
       let bestChromosome = { index: -1, score: 0 };
       let worstChromosome = { index: -1, score: 99999999 };
       let generationScoreSum = 0;
 
-      GENETICS.populationGameScore.forEach(function (score, index) {
+      GENETICS.populationGameScore.forEach( ( score: number, index: number ) => {
         //let fitness = 1 - 1 / (1 + score); // higher score is better fitness
 
         generationScoreSum += score;
         // keep best score
-        if (bestChromosome.score < score || bestChromosome.index === -1) {
+        if ( bestChromosome.score < score || bestChromosome.index === -1 ) {
           bestChromosome.score = score;
           bestChromosome.index = index;
         }
         // keep worst score
-        if (worstChromosome.score > score || worstChromosome.index === -1) {
+        if ( worstChromosome.score > score || worstChromosome.index === -1 ) {
           worstChromosome.score = score;
           worstChromosome.index = index;
         }
-      });
+      } );
 
       // reborn process
-      let forRebornIndexes = [];
-      let forParentingIndexes = [];
+      const forRebornIndexes: number[] = [];
+      const forParentingIndexes: number[] = [];
 
-      GENETICS.populationGameScore.forEach(function (score, index) {
+      GENETICS.populationGameScore.forEach( ( score: number, index: number ) => {
         // update avg success rate and age/generation count
-        GENETICS.populationAvgSuccessRates[index].s =
-          (GENETICS.populationAvgSuccessRates[index].s *
-            GENETICS.populationAvgSuccessRates[index].c +
-            score / bestChromosome.score) /
-          (GENETICS.populationAvgSuccessRates[index].c + 1);
+        GENETICS.populationAvgSuccessRates[index].successRate =
+          ( GENETICS.populationAvgSuccessRates[index].successRate *
+            GENETICS.populationAvgSuccessRates[index].ageCount +
+            score / bestChromosome.score ) /
+          ( GENETICS.populationAvgSuccessRates[ index ].ageCount + 1 );
 
-        GENETICS.populationAvgSuccessRates[index].c++;
-      });
+        GENETICS.populationAvgSuccessRates[index].ageCount++;
+      } );
 
       //GENETICS.avgTotalSuccessRate.best = ( GENETICS.avgTotalSuccessRate.best * GENETICS.avgTotalSuccessRate.count + GENETICS.populationAvgSuccessRates[ bestChromosome.index ].s ) / ( GENETICS.avgTotalSuccessRate.count + 1 );
       GENETICS.avgTotalSuccessRate.worst =
-        (GENETICS.avgTotalSuccessRate.worst *
+        ( GENETICS.avgTotalSuccessRate.worst *
           GENETICS.avgTotalSuccessRate.count +
-          GENETICS.populationAvgSuccessRates[worstChromosome.index].s) /
-        (GENETICS.avgTotalSuccessRate.count + 1);
+          GENETICS.populationAvgSuccessRates[ worstChromosome.index ].successRate ) /
+        ( GENETICS.avgTotalSuccessRate.count + 1 );
 
       GENETICS.avgTotalSuccessRate.count++;
 
-      GENETICS.populationGameScore.forEach(function (score, index) {
+      GENETICS.populationGameScore.forEach( ( score: number, index: number ) => {
         // choose unsuccessful population for reborn
         if (
           Math.random() < GENETICS.REBORN_GEN_DATA.CROSS_OVER_RATE && // last chance to keep it alive randomly!
-          GENETICS.populationAvgSuccessRates[index].c >
+          GENETICS.populationAvgSuccessRates[ index ].ageCount >
             GENETICS.REBORN_GEN_DATA.GEN_LIMIT &&
-          GENETICS.populationAvgSuccessRates[index].s <
+          GENETICS.populationAvgSuccessRates[ index ].successRate <
             GENETICS.avgTotalSuccessRate.worst * 1.2
         ) {
-          forRebornIndexes.push(index);
+          forRebornIndexes.push( index );
         }
         // choose rest population for parent
         if (
-          GENETICS.populationAvgSuccessRates[index].c >
+          GENETICS.populationAvgSuccessRates[ index ].ageCount >
             GENETICS.REBORN_GEN_DATA.GEN_LIMIT &&
-          GENETICS.populationAvgSuccessRates[index].s >
+          GENETICS.populationAvgSuccessRates[ index ].successRate >
             GENETICS.avgTotalSuccessRate.worst * 1.2
         ) {
-          forParentingIndexes.push(index);
+          forParentingIndexes.push( index );
         }
-      });
+      } );
 
       // always try to create one from the most successful chromosome
       let mostSuccessfulChromosomeIndex = -1;
       let mostSuccessfulChromosomeRate = 0.0;
-      GENETICS.populationAvgSuccessRates.forEach(function (rate, index) {
+      GENETICS.populationAvgSuccessRates.forEach( ( rate: SuccessRate, index: number ) => {
         if (
-          rate.s > mostSuccessfulChromosomeRate ||
+          rate.successRate > mostSuccessfulChromosomeRate ||
           mostSuccessfulChromosomeIndex === -1
         ) {
           mostSuccessfulChromosomeIndex = index;
-          mostSuccessfulChromosomeRate = rate.s;
+          mostSuccessfulChromosomeRate = rate.successRate;
         }
-      });
+      } );
 
-      if (forParentingIndexes.length > 0 && forRebornIndexes.length > 0) {
+      if ( forParentingIndexes.length > 0 && forRebornIndexes.length > 0 ) {
         // console.debug(
         //   "X",
         //   mostSuccessfulChromosomeIndex,
@@ -229,20 +224,20 @@ const GENETICS = {
         //   forRebornIndexes,
         //   GENETICS.populationAvgSuccessRates
         // );
-        GENETICS.population[forRebornIndexes[0]] = GENETICS.utils.getNewChild(
+        GENETICS.population[ forRebornIndexes[ 0 ] ] = GENETICS.utils.getNewChild(
           // giving the Best Chromosome as both parents
-          GENETICS.population[bestChromosome.index],
-          GENETICS.population[bestChromosome.index],
+          GENETICS.population[ bestChromosome.index ],
+          GENETICS.population[ bestChromosome.index ],
           true, // mutation enabled
           true // force to mutate
         );
-        console.info("reborn for the best #" + forRebornIndexes[0]);
+        console.info( "reborn for the best #" + forRebornIndexes[ 0 ] );
       }
 
-      if (forParentingIndexes.length > 2 && forRebornIndexes.length > 0) {
+      if ( forParentingIndexes.length > 2 && forRebornIndexes.length > 0 ) {
         let skippedTheFirstOne = false;
-        forRebornIndexes.forEach(function (rebornIndex) {
-          if (!skippedTheFirstOne) {
+        forRebornIndexes.forEach( ( rebornIndex ) => {
+          if ( !skippedTheFirstOne ) {
             // skipping the first one, since it's already created separately for the BestParent
             skippedTheFirstOne = true;
             return;
@@ -250,25 +245,25 @@ const GENETICS = {
           // REBORN
           console.info(
             "reborn #" + rebornIndex,
-            GENETICS.populationAvgSuccessRates[rebornIndex]
+            GENETICS.populationAvgSuccessRates[ rebornIndex ]
           );
-          GENETICS.population[rebornIndex] = GENETICS.utils.getNewChild(
+          GENETICS.population[ rebornIndex ] = GENETICS.utils.getNewChild(
             GENETICS.population[
               forParentingIndexes[
-                Math.floor(Math.random() * forParentingIndexes.length)
+                Math.floor( Math.random() * forParentingIndexes.length )
               ]
             ],
             GENETICS.population[
               forParentingIndexes[
-                Math.floor(Math.random() * forParentingIndexes.length)
+                Math.floor( Math.random() * forParentingIndexes.length )
               ]
             ],
             true // mutation enabled
           );
 
           // reset avg probability data for new chromosomes
-          GENETICS.populationAvgSuccessRates[rebornIndex] = { s: 0.0, c: 0 };
-        });
+          GENETICS.populationAvgSuccessRates[ rebornIndex ] = new SuccessRate();
+        } );
       }
 
       // generation is ready!
@@ -277,9 +272,9 @@ const GENETICS = {
 
       return { scoreSum: generationScoreSum };
     },
-    getOneCutChromosome: function (chromosome1, chromosome2) {
-      let randPosition =
-        Math.floor(Math.random() * (GENETICS.CHROMOSOME_DNA_COUNT - 1)) + 1;
+    getOneCutChromosome: ( chromosome1: Chromosome, chromosome2: Chromosome ) => {
+      const randPosition =
+        Math.floor( Math.random() * ( GENETICS.CHROMOSOME_DNA_COUNT - 1 ) ) + 1;
 
       //console.debug( 'OneCut at ', randPosition, chromosome1, chromosome2 );
       return {
@@ -294,82 +289,73 @@ const GENETICS = {
         i: chromosome2.i,
       };
     },
-    getNewChild: function (
-      chromosome1,
-      chromosome2,
-      mutation,
-      forceToMutate = false
-    ) {
+    getNewChild: (
+      chromosome1: Chromosome,
+      chromosome2: Chromosome,
+      mutation: boolean,
+      forceToMutate: boolean = false
+    ): Chromosome => {
       let mutate =
-        mutation && (Math.random() < GENETICS.MUTATION_RATE || forceToMutate);
+        mutation && ( Math.random() < GENETICS.MUTATION_RATE || forceToMutate );
       let mutationDnaIndex = mutate
-        ? Math.floor(Math.random() * GENETICS.CHROMOSOME_DNA_COUNT)
+        ? Math.floor( Math.random() * GENETICS.CHROMOSOME_DNA_COUNT )
         : -1;
-      if (mutationDnaIndex !== -1) {
-        console.info("MUTATION on DNA #" + mutationDnaIndex);
+      if ( mutationDnaIndex !== -1 ) {
+        console.info( "MUTATION on DNA #" + mutationDnaIndex );
       }
-      return {
-        a:
+      return new Chromosome(
           mutationDnaIndex === 0
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.a
             : chromosome2.a,
-        b:
           mutationDnaIndex === 1
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.b
             : chromosome2.b,
-        c:
           mutationDnaIndex === 2
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.c
             : chromosome2.c,
-        d:
           mutationDnaIndex === 3
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.d
             : chromosome2.d,
-        e:
           mutationDnaIndex === 4
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.e
             : chromosome2.e,
-        f:
           mutationDnaIndex === 5
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.f
             : chromosome2.f,
-        g:
           mutationDnaIndex === 6
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.g
             : chromosome2.g,
-        h:
           mutationDnaIndex === 7
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.h
             : chromosome2.h,
-        i:
-          mutationDnaIndex === 7
+          mutationDnaIndex === 8
             ? GENETICS.utils.getRandDNA()
             : Math.random() < 0.5
             ? chromosome1.i
             : chromosome2.i,
-      };
+      );
     },
   },
 };
 
 function GO() {
-  LEARN_IN_PROCESS = true;
+  LEARN_IN_PROGRESS = true;
 
   GENETICS.genNum = 0;
   GENETICS.currentPopulation = -1;
@@ -381,9 +367,9 @@ function GO() {
 function playNextPopulation() {
   GENETICS.currentPopulation++;
 
-  if (GENETICS.currentPopulation < GENETICS.POPULATION_COUNT) {
-    if (VISUALISE > 0) {
-      $("#labelPop").text(
+  if ( GENETICS.currentPopulation < GENETICS.POPULATION_COUNT ) {
+    if ( VISUALISE !== VISUALISATION_STATE.NONE ) {
+      $( "#labelPop" ).text(
         GENETICS.currentPopulation + 1 + " of " + GENETICS.POPULATION_COUNT
       );
     }
@@ -393,7 +379,7 @@ function playNextPopulation() {
     setTimeout(
       playARound,
       PLAY_TIME_MS / 2,
-      GENETICS.population[GENETICS.currentPopulation]
+      GENETICS.population[ GENETICS.currentPopulation ]
     );
   } else {
     // end of population
@@ -403,11 +389,11 @@ function playNextPopulation() {
 
     // update some data
     PLAY_INFO.avgScore =
-      Math.round((result.scoreSum / GENETICS.POPULATION_COUNT) * 100) / 100;
-    PLAY_INFO.avgScoreList.push(PLAY_INFO.avgScore);
-    if (VISUALISE > 0) {
-      $("#labelGen").text(GENETICS.genNum + 1);
-      $("#labelAvgScore").text(PLAY_INFO.avgScore);
+      Math.round( ( result.scoreSum / GENETICS.POPULATION_COUNT ) * 100 ) / 100;
+    PLAY_INFO.avgScoreList.push( PLAY_INFO.avgScore );
+    if ( VISUALISE !== VISUALISATION_STATE.NONE ) {
+      $( "#labelGen" ).text( GENETICS.genNum + 1 );
+      $( "#labelAvgScore" ).text( PLAY_INFO.avgScore );
     }
 
     console.info(
@@ -417,25 +403,25 @@ function playNextPopulation() {
     );
 
     // find best chromosome for Manual Play
-    let bestAvgIndex = null;
-    GENETICS.populationAvgSuccessRates.forEach(function (avg, index) {
+    let bestAvgIndex: number = -1;
+    GENETICS.populationAvgSuccessRates.forEach( ( avg: SuccessRate, index: number ) => {
       if (
-        bestAvgIndex === null ||
-        GENETICS.populationAvgSuccessRates[bestAvgIndex].s < avg.s
+        bestAvgIndex === -1 ||
+        GENETICS.populationAvgSuccessRates[ bestAvgIndex ].successRate < avg.successRate
       )
         bestAvgIndex = index;
-    });
+    } );
 
     // set the best one
-    myChromosome = GENETICS.population[bestAvgIndex];
+    myChromosome = GENETICS.population[ bestAvgIndex ];
 
-    if (VISUALISE > 0) {
+    if ( VISUALISE !== VISUALISATION_STATE.NONE ) {
       // show best chromosome data
-      $("#spanBestChromosome").text(
-        flatObjectToString(GENETICS.population[bestAvgIndex])
+      $( "#spanBestChromosome" ).text(
+        GENETICS.population[ bestAvgIndex ].toString()
       );
-      $("#spanBestAvgSuccess").text(
-        GENETICS.populationAvgSuccessRates[bestAvgIndex].s * 100
+      $( "#spanBestAvgSuccess" ).text(
+        GENETICS.populationAvgSuccessRates[ bestAvgIndex ].successRate * 100
       );
     }
 
@@ -445,58 +431,45 @@ function playNextPopulation() {
   }
 }
 
-function flatObjectToString(flatObject) {
-  let resultString = "";
-  Object.keys(flatObject).forEach(function (key) {
-    resultString +=
-      (resultString.length === 0 ? "{ " : ", ") + key + ": " + flatObject[key];
-  });
-
-  return resultString + " }";
-}
-
-function playARound(chromosome, elements) {
+function playARound( chromosome: Chromosome, elements: ELEMENT[] ) {
   let successfulPlay = false;
 
   //console.debug( 'PLAY a ROUND!' );
-  if (VISUALISE > 0) {
-    $(".elementBlock.fresh").removeClass("fresh");
+  if ( VISUALISE !== VISUALISATION_STATE.NONE ) {
+    $( ".elementBlock.fresh" ).removeClass( "fresh" );
   }
 
-  elements = drawNewElements(elements);
+  elements = drawNewElements( elements );
 
-  let bestPracticeOrder = {
-    sumValue: null,
-    bestOrderArray: [],
-    bestPositionArray: [],
+  const bestPracticeOrder = {
+    sumValue: null as number | null,
+    bestOrderArray: [] as ELEMENT[],
+    bestPositionArray: [] as Cordinate[],
   };
 
-  for (let index = 0; index < FACTORIAL_RESULT_SET[elements.length]; index++) {
+  for ( let index = 0; index < FACTORIAL_RESULT_SET[ elements.length ]; index++ ) {
     // 3! = 6 ; all possible place orders for 3 elements
     // TODO: GENERALISE the pickup solution for any element count! recursive mode.
     // it is hard-coded only for 3 elements!
-    let firstElementIndex = Math.floor(index / 2);
-    let secondElementIndex =
-      (firstElementIndex + (index % 2 ? 1 : 2)) % elements.length;
-    let thirdElementIndex =
-      (firstElementIndex + (index % 2 ? 2 : 1)) % elements.length;
-    let pickupElementOrder = [
-      elements[firstElementIndex],
-      elements[secondElementIndex],
-      elements[thirdElementIndex],
-    ];
-    //debugger;   // check order
+    const firstElementIndex = Math.floor( index / 2 );
+    const secondElementIndex =
+      ( firstElementIndex + ( index % 2 ? 1 : 2 ) ) % elements.length;
+    const thirdElementIndex =
+      ( firstElementIndex + ( index % 2 ? 2 : 1 ) ) % elements.length;
+    const pickupElementOrder = [
+      elements[ firstElementIndex ],
+      elements[ secondElementIndex ],
+      elements[ thirdElementIndex ],
+    ] as ELEMENT[];
 
     // try to simulate the chosen order
 
-    let MAX = GAME_INFO.BOARD_SIZE_BLOCK + ELEMENT_PATTERN_SIZE * 2;
-
     // make a copy of current board state for calculation score simulation
-    let boardStateSimulation = getCopyOfBoardState();
+    const boardStateSimulation = getCopyOfBoardState();
 
-    let currentOrderState = {
-      sumValue: 0,
-      bestPositions: [],
+    const currentOrderState = {
+      sumValue: 0 as number,
+      bestPositions: [] as Cordinate[],
     };
 
     for (
@@ -505,21 +478,21 @@ function playARound(chromosome, elements) {
       elementIndex++
     ) {
       let bestPractice = {
-        value: null,
-        position: { x: null, y: null },
-        element: null,
-        elementIndex: null,
+        value: null as number | null,
+        position: new Cordinate( -1, -1 ),
+        element: null as ELEMENT | null,
+        elementIndex: 0 as number,
       };
 
       // pick the elements up in the assumed order
-      let element = pickupElementOrder[elementIndex];
+      const element = pickupElementOrder[ elementIndex ];
 
-      for (let i = ELEMENT_PATTERN_SIZE * -1; i < MAX; i++) {
-        for (let j = ELEMENT_PATTERN_SIZE * -1; j < MAX; j++) {
+      for ( let i = ELEMENT_PATTERN_SIZE * -1; i < GAME_INFO.BOARD_SIZE_BLOCK; i++ ) {
+        for ( let j = ELEMENT_PATTERN_SIZE * -1; j < GAME_INFO.BOARD_SIZE_BLOCK; j++ ) {
           if (
             isPossibleToDrawOnStage(
               element,
-              { x: i, y: j },
+              new Cordinate( i, j ),
               boardStateSimulation
             )
           ) {
@@ -527,14 +500,12 @@ function playARound(chromosome, elements) {
             let calcValue = Math.abs(
               getCalculatedValue(
                 element,
-                { x: i, y: j },
+                new Cordinate( i, j ),
                 chromosome,
                 boardStateSimulation
               )
             );
-            if (isNaN(calcValue)) {
-              // TODO: test for debug
-              //debugger;
+            if ( isNaN( calcValue ) ) {
               console.debug(
                 "CALC isNaN",
                 element,
@@ -542,8 +513,10 @@ function playARound(chromosome, elements) {
                 chromosome,
                 boardStateSimulation
               );
+              throw new InvalidStateError( "Calculated value is NaN!!" );
             }
-            if (bestPractice.value === null || bestPractice.value > calcValue) {
+
+            if ( bestPractice.value === null || bestPractice.value > calcValue ) {
               // found better element-performance
               bestPractice.value = calcValue;
               bestPractice.position.x = i;
@@ -555,19 +528,21 @@ function playARound(chromosome, elements) {
         }
       }
 
-      if (bestPractice.value !== null) {
+      if ( bestPractice.value !== null ) {
         currentOrderState.sumValue += bestPractice.value;
-        currentOrderState.bestPositions.push(bestPractice.position);
+        currentOrderState.bestPositions.push( bestPractice.position );
 
-        //drawElementOnStage( bestPractice.element, bestPractice.position, 'fresh' );
+        if ( bestPractice.element == null ) {
+          throw new InvalidStateError( "BestPractice element cannot be null!" );
+        }
+
         simulateBoardState(
           bestPractice.element,
           bestPractice.position,
           boardStateSimulation
         );
-        checkForCleanup(boardStateSimulation, true);
+        checkForCleanup( boardStateSimulation, true );
 
-        //debugger;   // check board state
       } else {
         // unsuccessful tries for this element!!
         // skip current order
@@ -576,8 +551,7 @@ function playARound(chromosome, elements) {
     }
 
     // sum up the order round
-    //debugger;
-    if (currentOrderState.bestPositions.length === 3) {
+    if ( currentOrderState.bestPositions.length === 3 ) {
       // successful order try
       // check the order-round performance
       if (
@@ -594,128 +568,128 @@ function playARound(chromosome, elements) {
 
   // check the best order
 
-  if (bestPracticeOrder.sumValue !== null) {
+  if ( bestPracticeOrder.sumValue !== null ) {
     // found an acceptable order
     //console.debug( bestPractice );
     // make chosen move: put element on stage
-    if (DEBUG_MODE == 2) {
-      console.debug("solution: ", bestPracticeOrder);
+    if ( DEBUG_MODE == DEBUGMODE_STATE.DEBUG ) {
+      console.debug( "solution: ", bestPracticeOrder );
     }
 
     // draw elements in order of the best order found
-    bestPracticeOrder.bestOrderArray.forEach(function (element, index) {
-      if (DEBUG_MODE == 2) {
+    bestPracticeOrder.bestOrderArray.forEach( ( element: ELEMENT, index: number ) => {
+      if ( DEBUG_MODE == DEBUGMODE_STATE.DEBUG ) {
         console.info(
-          "draw #" + (index + 1),
+          "draw #" + ( index + 1 ),
           element,
-          bestPracticeOrder.bestPositionArray[index]
+          bestPracticeOrder.bestPositionArray[ index ]
         );
       }
 
-      if (HALT_LEARNING && !LEARN_IN_PROGRESS) {
+      if ( HALT_LEARNING && !LEARN_IN_PROGRESS ) {
         // for better presentation
-        setTimeout(function () {
+        setTimeout( () => {
           drawElementOnStage(
             element,
-            bestPracticeOrder.bestPositionArray[index],
+            bestPracticeOrder.bestPositionArray[ index ],
             "fresh"
           );
           checkForCleanup();
-        }, index * 2000);
+        }, index * 2000 );
       } else {
         // for learning
         drawElementOnStage(
           element,
-          bestPracticeOrder.bestPositionArray[index],
+          bestPracticeOrder.bestPositionArray[ index ],
           "fresh"
         );
         checkForCleanup();
       }
     });
 
-    //debugger;
-
     successfulPlay = true;
   } else {
     // unsuccessful!! cannot find even one acceptable order
     // end of play
-    GENETICS.populationGameScore[GENETICS.currentPopulation] = PLAY_INFO.score;
+    GENETICS.populationGameScore[ GENETICS.currentPopulation ] = PLAY_INFO.score;
     //console.debug( 'pop #' + GENETICS.currentPopulation + ' score', PLAY_INFO.score );
     //console.debug( ' *** END ! ', elements );
 
     successfulPlay = false;
   }
 
-  if (!successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
+  if ( !successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS ) {
     // only for normal play (not learning)
-    alert("GAME OVER!");
-  } else if (successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS) {
+    alert( "GAME OVER!" );
+  } else if ( successfulPlay && HALT_LEARNING && !LEARN_IN_PROGRESS ) {
     // only for normal play (not learning)
     // we shoukd choose 3 other random elements for the next round
     // it runs with delay after all 3 elements replacements in the board
-    setTimeout(function () {
-      PLAY_INFO.currentElements = drawNewElements(undefined);
-      $("#buttonPlayARound").prop("disabled", false);
-    }, 2000 * (0 + 1 + 2));
-  } else if (successfulPlay && !HALT_LEARNING && LEARN_IN_PROGRESS) {
+    setTimeout( () => {
+      PLAY_INFO.currentElements = drawNewElements();
+      $( "#buttonPlayARound" ).prop( "disabled", false );
+    }, 2000 * ( 0 + 1 + 2 ));
+  } else if ( successfulPlay && !HALT_LEARNING && LEARN_IN_PROGRESS ) {
     // next round
-    setTimeout(playARound, PLAY_TIME_MS, chromosome);
-  } else if (!HALT_LEARNING && LEARN_IN_PROGRESS) {
+    setTimeout( playARound, PLAY_TIME_MS, chromosome );
+  } else if ( !HALT_LEARNING && LEARN_IN_PROGRESS ) {
     // next population
-    setTimeout(playNextPopulation, PLAY_TIME_MS * (VISUALISE ? 4 : 1));
+    setTimeout( playNextPopulation, PLAY_TIME_MS * ( VISUALISE !== VISUALISATION_STATE.NONE ? 4 : 1 ) );
   }
 }
 
-function getCalculatedValue(element, position, chromosome, boardState) {
+function getCalculatedValue(
+  element: ELEMENT,
+  position: Cordinate,
+  chromosome: Chromosome,
+  boardState: BOARD_STATE
+): number {
   // make a copy of current board state for calculation score simulation
-  let boardStateSimulation = getCopyOfBoardState(boardState);
+  const boardStateSimulation = getCopyOfBoardState( boardState );
 
-  simulateBoardState(element, position, boardStateSimulation); // update board state
+  simulateBoardState( element, position, boardStateSimulation ); // update board state
 
   // simulate
   return (
-    chromosome.a * PLAY_INFO.statistics.getX(boardStateSimulation).divValue +
-    chromosome.b * PLAY_INFO.statistics.getY(boardStateSimulation).divValue +
-    chromosome.c * PLAY_INFO.statistics.getZ(boardStateSimulation).divValue +
-    chromosome.d * PLAY_INFO.statistics.getW(boardStateSimulation) +
-    chromosome.e * getOccupationOfElement(element) +
+    chromosome.a * PLAY_INFO.statistics.getX( boardStateSimulation ) +
+    chromosome.b * PLAY_INFO.statistics.getY( boardStateSimulation ) +
+    chromosome.c * PLAY_INFO.statistics.getZ( boardStateSimulation ) +
+    chromosome.d * PLAY_INFO.statistics.getW( boardStateSimulation ) +
+    chromosome.e * getOccupationOfElement( element ) +
     chromosome.f +
-    chromosome.g * PLAY_INFO.statistics.getT(boardStateSimulation) +
-    chromosome.h * PLAY_INFO.statistics.getS(boardStateSimulation).divValue +
-    chromosome.i * PLAY_INFO.statistics.getP(boardStateSimulation)
+    chromosome.g * PLAY_INFO.statistics.getT( boardStateSimulation ) +
+    chromosome.h * PLAY_INFO.statistics.getS( boardStateSimulation ) +
+    chromosome.i * PLAY_INFO.statistics.getP( boardStateSimulation )
   );
-
 }
 
-function simulateBoardState(element, position, boardState) {
+function simulateBoardState( element: ELEMENT, position: Cordinate, boardState: BOARD_STATE ) {
   // simulate Board State with the element in assumed position
-  for (var i = 0; i < ELEMENT_PATTERN_SIZE; i++) {
-    for (var j = 0; j < ELEMENT_PATTERN_SIZE; j++) {
-      if (element.PATTERN[j * ELEMENT_PATTERN_SIZE + i]) {
+  for ( var i = 0; i < ELEMENT_PATTERN_SIZE; i++ ) {
+    for ( var j = 0; j < ELEMENT_PATTERN_SIZE; j++ ) {
+      if ( element.PATTERN[ j * ELEMENT_PATTERN_SIZE + i ] ) {
         boardState[
-          (position.y + j) * GAME_INFO.BOARD_SIZE_BLOCK + position.x + i
-        ] = 1;
+          ( position.y + j ) * GAME_INFO.BOARD_SIZE_BLOCK + position.x + i
+        ] = true;
       }
     }
   }
 }
 
-function getCopyOfBoardState(boardState) {
-  if (boardState === undefined) {
+function getCopyOfBoardState( boardState: BOARD_STATE | undefined = undefined ): BOARD_STATE {
+  if ( boardState === undefined ) {
     boardState = PLAY_INFO.boardState;
   }
 
-  let result = [];
-  for (let index = 0; index < PLAY_INFO.boardState.length; index++) {
-    result.push(boardState[index]);
+  const result: boolean[] = [];
+  for ( let index = 0; index < boardState.length; index++ ) {
+    result.push( boardState[ index ] );
   }
 
-  return result;
+  return result as BOARD_STATE;
 }
 
-function sleepFor(sleepDuration) {
-  var now = new Date().getTime();
-  while (new Date().getTime() < now + sleepDuration) {
-    /* do nothing */
-  }
+function sleepFor( sleepDuration: number ) {
+  const now = new Date().getTime();
+  while ( new Date().getTime() < now + sleepDuration ) { /* do nothing */ }
 }

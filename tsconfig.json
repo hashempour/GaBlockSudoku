@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "rootDir": "./resources/scripts/ts",
+    "outDir": "./resources/scripts/js",
+
+    "module": "none",
+    "target": "es6",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": false,
+    "strict": true,
+    "skipLibCheck": true,
+  },
+  "include": [
+    "./resources/scripts/ts/**/*.ts",
+    "./resources/scripts/types/*.d.ts"
+  ]
+}
